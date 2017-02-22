@@ -18,3 +18,15 @@
 
 -	Backend: Nodejs, Mysql, …
 -	Frontend: React, Redux, jQuery, …
+
+
+**Setting up**
+
+After cloning project, make copy of `.env-sample` and rename it to `.env`
+
+**Run App**
+
+Start server: 
+`npm start`
+
+Start client: `npm run client`
