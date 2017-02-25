@@ -67,12 +67,12 @@ CREATE TABLE `project2`.`admin` (
 
 USE project2;
 
-ALTER TABLE product ADD CONSTRAINT fk_product_user FOREIGN KEY (userId) references user(userId);
-ALTER TABLE user add constraint fk_user_district foreign key(districtId) references district(districtId);
-alter table district add constraint fk_district_city foreign key (cityId) references city(cityId);
-alter table categorylink add constraint fk_catlink_category foreign key (categoryId) references category(categoryId);
-alter table report add constraint fk_rp_product foreign key (productId) references product(productId);
-alter table categorylink add constraint fk_catlink_product foreign key (productId) references product(productId);
-alter table commentlink add constraint fk_cmtlink_comment foreign key (commentId) references comment(commentId);
-alter table commentlink add constraint fk_cmtlink_user foreign key (userId) references user(userId);
-alter table commentlink add constraint fk_cmtlink_product foreign key (productId) references product(productId);
+ALTER TABLE product ADD CONSTRAINT fk_product_user FOREIGN KEY (userId) references user(userId) ON DELETE CASCADE;
+ALTER TABLE user add constraint fk_user_district foreign key(districtId) references district(districtId) ON DELETE CASCADE;
+alter table district add constraint fk_district_city foreign key (cityId) references city(cityId) ON DELETE CASCADE;
+alter table categorylink add constraint fk_catlink_category foreign key (categoryId) references category(categoryId) ON DELETE CASCADE;
+alter table report add constraint fk_rp_product foreign key (productId) references product(productId) ON DELETE CASCADE;
+alter table categorylink add constraint fk_catlink_product foreign key (productId) references product(productId) ON DELETE CASCADE;
+alter table commentlink add constraint fk_cmtlink_comment foreign key (commentId) references comment(commentId) ON DELETE CASCADE;
+alter table commentlink add constraint fk_cmtlink_user foreign key (userId) references user(userId) ON DELETE CASCADE;
+alter table commentlink add constraint fk_cmtlink_product foreign key (productId) references product(productId) ON DELETE CASCADE;
