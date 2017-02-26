@@ -39,7 +39,7 @@ CREATE TABLE `project2`.`product` (
   `districtId` INT NOT NULL,
   `date` DATE NOT NULL,
   `userId` INT NOT NULL,
-  `isSelled` INT NOT NULL DEFAULT 0,
+  `isSold` INT NOT NULL DEFAULT 0,
   `isVerified` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`productId`));
 
