@@ -56,6 +56,7 @@ class City {
 
 				let props = Object.assign({}, rows[0]);
 				let city = new City(props);
+				
 				return callback(null, city);
 			});
 		});

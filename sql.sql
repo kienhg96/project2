@@ -76,3 +76,7 @@ alter table categorylink add constraint fk_catlink_product foreign key (productI
 alter table commentlink add constraint fk_cmtlink_comment foreign key (commentId) references comment(commentId) ON DELETE CASCADE;
 alter table commentlink add constraint fk_cmtlink_user foreign key (userId) references user(userId) ON DELETE CASCADE;
 alter table commentlink add constraint fk_cmtlink_product foreign key (productId) references product(productId) ON DELETE CASCADE;
+
+--
+alter table user add column fullName VARCHAR(128);
+alter table user modify column password varchar(128);

@@ -82,4 +82,4 @@ class District {
 	}
 }
 
-module.exports = City;
+module.exports = District;

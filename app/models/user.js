@@ -10,6 +10,7 @@ class User {
 		this._userId = props.userId;
 		this._phone = props.phone;
 		this._email = props.email;
+		this._fullName = props.fullName;
 		this._districtId = props.districtId;
 		if (props.encryptedPassword) {
 			this._password = props.encryptedPassword;
@@ -24,6 +25,8 @@ class User {
 
 	get email() { return this._email; }
 
+	get fullName() { return this._fullName; }
+
 	get districtId() { return this._districtId; }
 
 	rawData() {
@@ -31,6 +34,7 @@ class User {
 			userId: this.userId,
 			phone: this.phone,
 			email: this.email,
+			fullName: this.fullName,
 			districtId: this.districtId
 		};
 	}
@@ -54,14 +58,15 @@ class User {
 		let data = {
 			userId: this.userId,
 			phone: this.phone,
-			email: this.email
+			email: this.email,
+			fullName: this.fullName
 		};
 
 		District.findById(this.districtId, (err, district) => {
 			if (err) return callback(err);
 
 			if (!district) return callback(null, data);
-
+			
 			district.toJSON((err, districtJSON) => {
 				data.district = districtJSON;
 				return callback(null, data);
