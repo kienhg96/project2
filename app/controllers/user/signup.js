@@ -32,7 +32,8 @@
 	Failed: errCode:
 		500: Internal error
 		-1: Missing argument/ invalid argument type
-
+		-2: District not found
+		-3: User already exists
 */
 
 const User = require(global.__base + 'app/models/user');
@@ -87,7 +88,7 @@ let signup = (req, res) => {
 	    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
 	    	}
 	    	if (user) {
-	    		return res.status(400).json({ errCode: -2, msg: 'User exists' });
+	    		return res.status(400).json({ errCode: -3, msg: 'User already exists' });
 	    	}
 	    	User.findByEmail(info.email, (err, user) => {
 	    		if (err) {
@@ -95,7 +96,7 @@ let signup = (req, res) => {
 		    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
 		    	}
 		    	if (user) {
-		    		return res.status(400).json({ errCode: -2, msg: 'User exists' });
+		    		return res.status(400).json({ errCode: -3, msg: 'User already exists' });
 		    	}
 
 		    	// Create new user

@@ -133,6 +133,17 @@ class User {
 			});
 		});
 	}
+
+	comparePassword(password) {
+		let result;
+		try {
+			result = bcrypt.compareSync(password, this._password);
+		} catch(err) {
+			console.error(err);
+			return false;
+		}
+		return result;
+	}
 }
 
 module.exports = User;
