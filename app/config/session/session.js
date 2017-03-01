@@ -2,7 +2,7 @@
 
 const expressSession = require('express-session');
 const RedisStore = require('connect-redis')(expressSession);
-const redisClient = require(global.__base + 'app/database/redis/redis-client');
+const redisClient = require(global.__base + 'app/config/database/redis/redis-client');
 
 const ttl = 3600 * 24 * 7; // 7 days
 
@@ -20,5 +20,7 @@ const session = expressSession({
 		maxAge: 1000 * ttl
 	}
 });
+
+console.log('Session');
 
 module.exports = session;
