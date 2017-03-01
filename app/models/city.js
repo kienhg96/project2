@@ -33,6 +33,33 @@ class City {
 			});
 		});
 	} 
+
+	toJSON(callback) {
+		return callback(null, {
+			cityId: this.cityId,
+			name: this.name
+		});
+	}
+
+	static findById(id, callback) {
+		pool.getConnection((err, conn) => {
+			if (err) return callback(null);
+
+			let query = 'SELECT * FROM city WHERE cityId = ?';
+			conn.query(query, [id], (err, rows) => {
+				conn.release();
+				if (err) return callback(err);
+
+				if (!rows[0]) {
+					return callback(null, null);
+				}
+
+				let props = Object.assign({}, rows[0]);
+				let city = new City(props);
+				return callback(null, city);
+			});
+		});
+	} 
 }
 
 module.exports = City;
