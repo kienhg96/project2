@@ -1,7 +1,17 @@
 'use strict';
+
 require('dotenv').load();
+
 const express = require('express');
 const app = express();
+
+// Base path
+global.__base = process.cwd() + '/';
+
+const apiRouter = require(global.__base + 'app/routes/api');
+
+// Routes
+app.use('/api', apiRouter);
 
 app.get('/', (req, res) => {
 	res.send('OK');

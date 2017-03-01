@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + '..');
+const pool = require(global.__base + 'app/database/mysql/pool');
 
 class City {
 
