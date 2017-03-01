@@ -111,6 +111,9 @@ let signup = (req, res) => {
 			    	newUser.toJSON((err, newUserJSON) => {
 			    		let resData = { user: newUserJSON };
 
+			    		// Set session
+			    		req.session.userId = newUserJSON.userId;
+			    		
 			    		return res.json({ errCode: 0, msg: 'Success', data: resData })
 			    	});
 		    	});
