@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/database/mysql/pool');
+const pool = require(global.__base + 'app/config/database/mysql/pool');
 const City = require('./city');
 
 class District {

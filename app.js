@@ -8,7 +8,7 @@ const app = express();
 // Base path
 global.__base = process.cwd() + '/';
 
-const apiRouter = require(global.__base + 'app/routes/api');
+const apiRouter = require(global.__base + 'app/routes/api/index');
 
 // Routes
 app.use('/api', apiRouter);
