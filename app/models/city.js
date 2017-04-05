@@ -61,6 +61,14 @@ class City {
 			});
 		});
 	} 
+	static findAll(callback) {
+		// ...
+		const rows = [
+			{id: 1, name: 'Hanoi'}, 
+			{id: 2, name: 'Haiphong'}
+		]
+		return callback(null, rows);
+	}
 }
 
 module.exports = City;

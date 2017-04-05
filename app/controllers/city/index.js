@@ -1,7 +1,9 @@
 'use strict';
 
-let city = {
+const getList = require('./getList');
 
+let city = {
+	getList: getList
 };
 
 module.exports = city;

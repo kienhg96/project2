@@ -18,10 +18,11 @@
   },
   "homepage": "https://github.com/kienhg96/project2#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.1",
+    "connect-redis": "^3.2.0",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
-    "express-session": "^1.15.1",
-    "mysql": "^2.13.0"
+    "express-session": "^1.15.1"
   }
 }
