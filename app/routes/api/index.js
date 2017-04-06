@@ -6,6 +6,7 @@ const session = require(global.__base + 'app/config/session/session');
 
 const userRouter = require('./user');
 const cityRouter = require('./city');
+const districtRouter = require('./district');
 
 
 // Set session
@@ -14,6 +15,7 @@ router.use(session);
 // API
 router.use('/user', userRouter);
 router.use('/city', cityRouter);
+router.use('/district', districtRouter);
 // Test
 const middleware = require(global.__base + 'app/controllers/middleware/index');
 const test = require(global.__base + 'app/controllers/test/test');

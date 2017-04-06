@@ -12,7 +12,7 @@ let getList = function(req, res){
 			}
 
 			if (cities.length == 0){
-				return res.status(200).json({ errCode: 200, msg: 'Success', data: list});
+				return res.status(200).json({ errCode: 0, msg: 'Success', data: list});
 			}
 
 			for(let i = 0; i < cities.length; ++i){
@@ -23,7 +23,7 @@ let getList = function(req, res){
 
 					list.push(city);
 					if (list.length == cities.length){
-						return res.status(200).json({ errCode: 200, msg: 'Success', data: list});
+						return res.status(200).json({ errCode: 0, msg: 'Success', data: list});
 					}
 				});
 			}

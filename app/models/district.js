@@ -80,6 +80,31 @@ class District {
 			});
 		});
 	}
+
+	static showAllList(callback){
+		pool.getConnection(function(err, conn){
+			if (err) return callback(null);
+
+			let query = 'SELECT * FROM district';
+			conn.query(query, function(err, rows){
+				conn.release();
+				if (err) return callback(err);
+
+				if (!rows[0]){
+					return callback(null, null);
+				}
+
+				let districts = [];
+				for(let i = 0; i < rows.length; ++i){
+					let props = Object.assign({}, rows[i]);
+					let district = new District(props);
+					districts.push(district);
+				}
+				return callback(null, districts);
+
+			});
+		});
+	}
 }
 
 module.exports = District;
