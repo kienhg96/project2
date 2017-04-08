@@ -3,13 +3,12 @@
 const express = require('express');
 const router = express.Router();
 
-const isAuthenticated = require(global.__base + 'controllers/middleware/is-authenticated');
-const deserialize = require(global.__base + 'controllers/middleware/deserialize');
+const deserializeUser = require(global.__base + 'controllers/middleware/deserialize-user');
 const user = require(global.__base + 'controllers/user');
 
 // Authenticate
 router.post('/signup', user.signup);
 router.post('/login', user.login);
-router.get('/logout', isAuthenticated, deserialize, user.logout);
+router.get('/logout', deserializeUser, user.logout);
 
 module.exports = router;

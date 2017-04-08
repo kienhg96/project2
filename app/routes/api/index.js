@@ -6,7 +6,7 @@ const session = require(global.__base + 'config/session');
 
 const userRouter = require('./user');
 const cityRouter = require('./city');
-
+const adminRouter = require('./admin');
 
 // Set session
 router.use(session);
@@ -14,9 +14,6 @@ router.use(session);
 // API
 router.use('/user', userRouter);
 router.use('/city', cityRouter);
-// Test
-const middleware = require(global.__base + 'controllers/middleware');
-const test = require(global.__base + 'controllers/test/test');
-router.get('/test', middleware.isAuthenticated, middleware.deserialize, test);
+router.use('/admin', adminRouter);
 
 module.exports = router;
