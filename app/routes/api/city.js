@@ -9,6 +9,6 @@ const deserialize = require(global.__base + 'controllers/middleware/deserialize'
 const city = require(global.__base + 'controllers/city');
 
 router.route('/')
-	.get(isAuthenticated, deserialize, city.getCities);
+	.get(city.getCities);
 
 module.exports = router;
