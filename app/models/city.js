@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/config/database/mysql/pool');
+const pool = require(global.__base + 'config/database/mysql');
 
 class City {
 
@@ -61,6 +61,30 @@ class City {
 			});
 		});
 	} 
+
+	static findAll(callback) {
+		pool.getConnection((err, conn) => {
+			if (err) {
+				return callback(err);
+			}
+			let query = 'SELECT * FROM city';
+			pool.query(query, [], (err, rows) => {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+				let cities = [];
+				rows.forEach((row, i) => {
+					cities.push({
+						cityId: row.cityId,
+						name: row.name
+					});
+				});
+
+				return callback(null, cities);
+			});
+		});
+	}
 }
 
 module.exports = City;

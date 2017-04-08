@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const session = require(global.__base + 'app/config/session/session');
+const session = require(global.__base + 'config/session');
 
 const userRouter = require('./user');
 const cityRouter = require('./city');
@@ -15,8 +15,8 @@ router.use(session);
 router.use('/user', userRouter);
 router.use('/city', cityRouter);
 // Test
-const middleware = require(global.__base + 'app/controllers/middleware/index');
-const test = require(global.__base + 'app/controllers/test/test');
+const middleware = require(global.__base + 'controllers/middleware');
+const test = require(global.__base + 'controllers/test/test');
 router.get('/test', middleware.isAuthenticated, middleware.deserialize, test);
 
 module.exports = router;

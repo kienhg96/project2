@@ -8,44 +8,41 @@
 	}
 	Response:
 	Success: {
-		errCode: 0, 
-		msg: 'Success',
+		error: OK, 
+		message: String,
 		data: {
-			user: {
-				userId: Number,
-				phone: String,
-				email: String,
-				fullName: String,
-				district: {
-					districtId: Number,
-					name: String,
-					city: {
-						cityId: Number,
-						name: String
-					}
+			userId: Number,
+			phone: String,
+			email: String,
+			fullName: String,
+			district: {
+				districtId: Number,
+				name: String,
+				city: {
+					cityId: Number,
+					name: String
 				}
 			}
 		}
 	}
-	Failed: errCode:
-		500: Internal error
-		-1: Missing argument/ invalid argument type
-		-5: Password mismatch
-		-6: User not found
+	Error:
+		INTERNAL_ERROR
+		MISSING_ARGUMENT
+		INVALID_ARGUMENT_TYPE
+		WRONG_PASSWORD
+		USER_NOT_FOUND
 */
 
-const User = require(global.__base + 'app/models/user');
-const utils = require(global.__base + 'app/utils/index');
+const User = require(global.__base + 'models/user');
+const utils = require(global.__base + 'utils');
+const errTypes = require(global.__base + 'config/error');
 
 let login = (req, res) => {
 	// Check key not exists
 	let keys = ['username', 'password'];
     let notExists = utils.checkKeysNotExists(req.body, keys);
     if (notExists !== -1) {
-        return res.status(400).json({
-            errCode: -1, 
-            msg: 'Missing argument ' + keys[notExists]
-        });
+        return res.result(400, errTypes.MISSING_ARGUMENT, 'Missing argument ' + keys[notExists]);
     }
 
     let username = req.body.username;
@@ -54,55 +51,50 @@ let login = (req, res) => {
     // By phone
     User.findByPhone(username, (err, user) => {
     	if (err) {
-    		console.error(err);
-    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+    		return res.error(err);
     	}
     	if (user) {
     		if (!user.comparePassword(password)) {
     			// Password mismatch
-    			return res.status(400).json({ errCode: -5, msg: 'Password mismatch' });
+    			return res.result(401, errTypes.WRONG_PASSWORD, 'Wrong password');
     		} 
 
     		user.toJSON((err, userJSON) => {
     			if (err) {
-		    		console.error(err);
-		    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+		    		return res.error(err);
 		    	}
 
 		    	// Set session
 		    	req.session.userId = userJSON.userId;
 		    	// Response
-		    	let resData = { user: userJSON };		    	
+		    	let resData = userJSON;		    	
 
-		    	return res.json({ errCode: 0, msg: 'Success', data: resData });
+		    	return res.result(200, errTypes.OK, 'OK', resData);
     		});
     	} else {
     		// By email
     		User.findByEmail(username, (err, user) => {
     			if (err) {
-		    		console.error(err);
-		    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+		    		return res.error(err);
 		    	}
 		    	if (!user) {
-		    		return res.status(404).json({ errCode: -6, msg: 'User not found' });
+		    		return res.result(404, errTypes.USER_NOT_FOUND, 'User not found');
 		    	}
 
 		    	if (!user.comparePassword(password)) {
 	    			// Password mismatch
-	    			return res.status(400).json({ errCode: -5, msg: 'Password mismatch' });
+	    			return res.result(401, errTypes.WRONG_PASSWORD, 'Wrong password');
 	    		} 
 	    		user.toJSON((err, userJSON) => {
 	    			if (err) {
-			    		console.error(err);
-			    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+			    		return res.error(err);
 			    	}
-
 			    	// Set session
 			    	req.session.userId = userJSON.userId;
 			    	// Response
-			    	let resData = { user: userJSON };		    	
+			    	let resData = userJSON;		    	
 
-			    	return res.json({ errCode: 0, msg: 'Success', data: resData });
+			    	return res.result(200, errTypes.OK, 'OK', resData);
 	    		});
     		});	
     	}
