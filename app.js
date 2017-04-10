@@ -1,28 +1,15 @@
-'use strict';
+"use strict";
+
+// Base directory
+global.__base = __dirname + '/app/'; 
 
 require('dotenv').load();
-// Base path
-global.__base = process.cwd() + '/';
+const argv = require('optimist').argv;
+const server = require(global.__base + 'config/server');
+// require(global.__base + 'config/socket/io');
 
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-
-const apiRouter = require(global.__base + 'app/routes/api/index');
-const log = require(global.__base + 'app/controllers/middleware/index').log;
-// Body parser
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
-app.use(bodyParser.json({ limit: '100mb' }));
-
-// Routes
-app.use('/', log);
-app.use('/api', apiRouter);
-
-app.get('/', (req, res) => {
-	res.send('OK');
-});
-
-const port = process.env.PORT || 8080;
-app.listen(8080, () => {
-	console.log('Server is listening on port', port);
+const port = argv.port || process.env.PORT || 8080;
+const host = '0.0.0.0';
+server.listen(port, host, () => {
+	console.log('Server is listening on %s:%s', server.address().address, server.address().port);
 });

@@ -1,9 +1,9 @@
 'use strict';
 
-const getList = require('./get-list');
+const getDistricts = require('./get-districts');
 
 let district = {
-	getList: getList
+	getDistricts: getDistricts
 };
 
 module.exports = district;

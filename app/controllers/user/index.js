@@ -3,7 +3,7 @@
 const login = require('./login');
 const logout = require('./logout');
 const signup = require('./signup');
-const getUser = require('./get-user');
+const getUser = require('./get-info');
 
 let user = {
 	login: login,

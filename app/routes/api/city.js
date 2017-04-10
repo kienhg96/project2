@@ -3,8 +3,9 @@
 const express = require('express');
 const router = express.Router();
 
-const cityController = require(global.__base + 'app/controllers/city/index');
+const city = require(global.__base + 'controllers/city');
 
-router.get('/list', cityController.getList)
+router.route('/')
+	.get(city.getCities);
 
 module.exports = router;

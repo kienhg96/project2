@@ -10,59 +10,56 @@
 	}
 	Response:
 	Success: { 
-		errCode: 0,
-		msg: String, 
+		error: OK,
+		message: String, 
 		data: {
-			user: {
-				userId: Number,
-				phone: String,
-				email: String,
-				fullName: String,
-				district: {
-					districtId: Number,
-					name: String,
-					city: {
-						cityId: Number,
-						name: String
-					}
+			userId: Number,
+			phone: String,
+			email: String,
+			fullName: String,
+			district: {
+				districtId: Number,
+				name: String,
+				city: {
+					cityId: Number,
+					name: String
 				}
 			}
 		}
 	}
-	Failed: errCode:
-		500: Internal error
-		-1: Missing argument/ invalid argument type
-		-2: District not found
-		-3: User already exists
+	Error: 
+		INTERNAL_ERROR
+		MISSING_ARGUMENT
+		INVALID_ARGUMENT_TYPE
+		USER_EXISTS
+		DISTRICT_NOT_FOUND
 */
 
-const User = require(global.__base + 'app/models/user');
-const District = require(global.__base + 'app/models/district');
-const utils = require(global.__base  + 'app/utils/index');
+const User = require(global.__base + 'models/user');
+const District = require(global.__base + 'models/district');
+const utils = require(global.__base  + 'utils');
+const errTypes = require(global.__base + 'config/error');
 
 let signup = (req, res) => {
 	// Check key not exists
 	let keys = ['phone', 'email', 'password', 'districtId'];
     let notExists = utils.checkKeysNotExists(req.body, keys);
     if (notExists !== -1) {
-        return res.status(400).json({
-            errCode: -1, 
-            msg: 'Missing argument ' + keys[notExists]
-        });
+        return res.result(400, errTypes.MISSING_ARGUMENT, 'Missing argument ' + keys[notExists]);
     }
     // Check key NaN
     keys = ['districtId'];
     let keyNaN = utils.checkKeysNaN(req.body, 'districtId');
     if (keyNaN !== -1) {
-    	return res.status(400).json({ errCode: -1, msg: 'Argument ' + key[keyNaN] + ' is not a number' });
+        return res.result(400, errTypes.INVALID_ARGUMENT_TYPE, 'Invalid type of argument ' + keys[keyNaN]);
     }
     // Check mail
     if (!utils.checkMail(req.body.email)) {
-    	return res.status(400).json({ errCode: -1, msg: 'Invalid email format' });
+        return res.result(400, errTypes.INVALID_ARGUMENT_TYPE, 'Invalid type of argument email');
     }
     // Check phone
     if (!utils.checkPhone(req.body.phone)) {
-    	return res.status(400).json({ errCode: -1, msg: 'Invalid phone format' });
+        return res.result(400, errTypes.INVALID_ARGUMENT_TYPE, 'Invalid type of argument phone');
     }
     // Check district exist
     let info = {
@@ -74,48 +71,40 @@ let signup = (req, res) => {
     };
     District.findById(info.districtId, (err, district) => {
     	if (err) {
-    		console.error(err);
-    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+    		return res.error(err);
     	}
     	if (!district) {
-    		return res.status(404).json({ errCode: -2, msg: 'District not found' });
+    		return res.result(404, errTypes.DISTRICT_NOT_FOUND, 'District not found');
     	}
-
     	// Check user exist
 	    User.findByPhone(info.phone, (err, user) => {
 	    	if (err) {
-	    		console.error(err);
-	    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+	    		return res.error(err);
 	    	}
 	    	if (user) {
-	    		return res.status(400).json({ errCode: -3, msg: 'User already exists' });
+    			return res.result(400, errTypes.USER_EXISTS, 'User already exists');
 	    	}
 	    	User.findByEmail(info.email, (err, user) => {
 	    		if (err) {
-		    		console.error(err);
-		    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+	    			return res.error(err);
 		    	}
 		    	if (user) {
-		    		return res.status(400).json({ errCode: -3, msg: 'User already exists' });
+		    		return res.result(400, errTypes.USER_EXISTS, 'User already exists');
 		    	}
-
 		    	// Create new user
 		    	let newUser = new User(info);
 		    	// Save to database
 		    	newUser.save((err) => {
 		    		if (err) {
-			    		console.error(err);
-			    		return res.status(500).json({ errCode: 500, msg: 'Internal error' });
+			    		return res.error(err);
 			    	}
-
 			    	// Response
 			    	newUser.toJSON((err, newUserJSON) => {
-			    		let resData = { user: newUserJSON };
-
+			    		let resData = newUserJSON;
 			    		// Set session
 			    		req.session.userId = newUserJSON.userId;
 			    		
-			    		return res.json({ errCode: 0, msg: 'Success', data: resData })
+			    		return res.result(200, errTypes.OK, 'OK', resData);
 			    	});
 		    	});
 	    	});

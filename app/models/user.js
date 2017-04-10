@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/config/database/mysql/pool');
+const pool = require(global.__base + 'config/database/mysql');
 const bcrypt = require('bcrypt-nodejs');
 const District = require('./district');
 

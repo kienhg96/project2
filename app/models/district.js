@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/config/database/mysql/pool');
+const pool = require(global.__base + 'config/database/mysql');
 const City = require('./city');
 
 class District {
@@ -81,28 +81,17 @@ class District {
 		});
 	}
 
-	static showAllList(callback){
-		pool.getConnection(function(err, conn){
-			if (err) return callback(null);
-
-			let query = 'SELECT * FROM district';
-			conn.query(query, function(err, rows){
-				conn.release();
-				if (err) return callback(err);
-
-				if (!rows[0]){
-					return callback(null, null);
-				}
-
-				let districts = [];
-				for(let i = 0; i < rows.length; ++i){
-					let props = Object.assign({}, rows[i]);
-					let district = new District(props);
-					districts.push(district);
-				}
-				return callback(null, districts);
-
+	static findAll(callback) {
+		let query = 'SELECT * FROM district';
+		pool.query(query, [], (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			let districts = [];
+			rows.forEach((row, i) => {
+				districts.push(new District(row));
 			});
+			return callback(null, districts);
 		});
 	}
 }

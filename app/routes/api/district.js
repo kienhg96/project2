@@ -3,8 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
-const districtController = require(global.__base + '/app/controllers/district/index');
+const district = require(global.__base + 'controllers/district');
 
-router.get('/list', districtController.getList);
-
+router.route('/')
+	.get(district.getDistricts);
 module.exports = router;
