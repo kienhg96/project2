@@ -91,3 +91,6 @@ CREATE TABLE `project2`.`productimage` (
 --
 ALTER TABLE `project2`.product 
   DROP COLUMN districtId;
+-- 
+ALTER TABLE `project2`.user 
+  ADD COLUMN `date` date;

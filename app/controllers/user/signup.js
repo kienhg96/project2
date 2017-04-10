@@ -67,7 +67,8 @@ let signup = (req, res) => {
     	email: req.body.email,
     	phone: req.body.phone,
     	password: req.body.password,
-    	districtId: parseInt(req.body.districtId, 10)
+    	districtId: parseInt(req.body.districtId, 10),
+    	date: Date.now()
     };
     District.findById(info.districtId, (err, district) => {
     	if (err) {

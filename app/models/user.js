@@ -1,6 +1,7 @@
 'use strict';
 
 const pool = require(global.__base + 'config/database/mysql');
+const moment = require('moment');
 const bcrypt = require('bcrypt-nodejs');
 
 class User {
@@ -16,6 +17,7 @@ class User {
 		} else {
 			this._password = bcrypt.hashSync(props.password || "");
 		}
+		this._date = moment(props.date).format('YYYY-MM-DD');
 	}
 
 	get userId() { return this._userId; }
@@ -23,14 +25,16 @@ class User {
 	get email() { return this._email; }
 	get fullName() { return this._fullName; }
 	get districtId() { return this._districtId; }
+	get date() { return this._date; }
 
 	rawData() {
 		return {
-			userId: this.userId,
-			phone: this.phone,
-			email: this.email,
-			fullName: this.fullName,
-			districtId: this.districtId
+			userId: this._userId,
+			phone: this._phone,
+			email: this._email,
+			fullName: this._fullName,
+			districtId: this._districtId,
+			date: this._date
 		};
 	}
 
@@ -56,7 +60,8 @@ class User {
 			userId: this.userId,
 			phone: this.phone,
 			email: this.email,
-			fullName: this.fullName
+			fullName: this.fullName,
+			date: this.date
 		};
 
 		District.findById(this.districtId, (err, district) => {
