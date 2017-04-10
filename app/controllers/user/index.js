@@ -3,13 +3,15 @@
 const login = require('./login');
 const logout = require('./logout');
 const signup = require('./signup');
-const getUser = require('./get-info');
+const getInfo = require('./get-info');
+const updateInfo = require('./update-info');
 
 let user = {
 	login: login,
 	logout: logout,
 	signup: signup,
-	getUser: getUser
+	getInfo: getInfo,
+	updateInfo: updateInfo
 };
 
 module.exports = user;

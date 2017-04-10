@@ -10,5 +10,8 @@ const user = require(global.__base + 'controllers/user');
 router.post('/signup', user.signup);
 router.post('/login', user.login);
 router.get('/logout', deserializeUser, user.logout);
+router.route('/info')
+	.get(deserializeUser, user.getInfo)
+	.post(deserializeUser, user.updateInfo);
 
 module.exports = router;

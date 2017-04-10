@@ -2,7 +2,7 @@
 
 const pool = require(global.__base + 'config/database/mysql');
 const bcrypt = require('bcrypt-nodejs');
-const District = require('./district');
+
 
 class User {
 
@@ -55,6 +55,8 @@ class User {
 	} 
 
 	toJSON(callback) {
+		const District = require('./district');
+
 		let data = {
 			userId: this.userId,
 			phone: this.phone,
@@ -72,6 +74,70 @@ class User {
 				return callback(null, data);
 			});
 		});
+	}
+
+	comparePassword(password) {
+		let result;
+		try {
+			result = bcrypt.compareSync(password, this._password);
+		} catch(err) {
+			console.error(err);
+			return false;
+		}
+		return result;
+	}
+
+	updatePassword(newPassword, callback) {
+		this._password = bcrypt.hashSync(newPassword);
+		let query = 'UPDATE user SET password = ? WHERE userId = ?';
+		pool.query(query, [this._password, this._userId], (err, result) => {
+			if (err) {
+				return callback(err);
+			}
+			return callback(null);
+		});
+	}
+
+	updateInfo(info, callback) {
+		const District = require('./district');
+
+		if (info.districtId) {
+			District.findById(info.districtId, (err, district) => {
+				if (err) {
+					return callback(err);
+				}
+				if (!district) {
+					delete info.districtId;
+				}
+				let query = 'UPDATE user SET ? WHERE userId = ?';
+				pool.query(query, [info, this._userId], (err, result) => {
+					if (err) {
+						return callback(err);
+					}
+					let keys = ['fullName', 'districtId'];
+					keys.forEach((key) => {
+						if (info[key]) {
+							this['_' + key] = info[key];
+						}
+					});
+					return callback(null);
+				});
+			});
+		} else {
+			let query = 'UPDATE user SET ? WHERE userId = ?';
+			pool.query(query, [info, this._userId], (err, result) => {
+				if (err) {
+					return callback(err);
+				}
+				let keys = ['fullName'];
+				keys.forEach((key) => {
+					if (info[key]) {
+						this['_' + key] = info[key];
+					}
+				});
+				return callback(null);
+			});
+		}
 	}
 
 	static findById(id, callback) {
@@ -134,16 +200,6 @@ class User {
 		});
 	}
 
-	comparePassword(password) {
-		let result;
-		try {
-			result = bcrypt.compareSync(password, this._password);
-		} catch(err) {
-			console.error(err);
-			return false;
-		}
-		return result;
-	}
 }
 
 module.exports = User;
