@@ -3,7 +3,6 @@
 const pool = require(global.__base + 'config/database/mysql');
 const bcrypt = require('bcrypt-nodejs');
 
-
 class User {
 
 	constructor(props) {
@@ -20,13 +19,9 @@ class User {
 	}
 
 	get userId() { return this._userId; }
-
 	get phone() { return this._phone; }
-
 	get email() { return this._email; }
-
 	get fullName() { return this._fullName; }
-
 	get districtId() { return this._districtId; }
 
 	rawData() {

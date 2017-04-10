@@ -10,7 +10,6 @@ class City {
 	}
 
 	get cityId() { return this._cityId; }
-
 	get name() { return this._name; }
 
 	rawData() {
