@@ -13,6 +13,7 @@
 	}
 	Error:
 		INTERNAL_ERROR
+		IS_NOT_AUTHENTICATED
 
 */
 

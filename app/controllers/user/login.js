@@ -22,7 +22,8 @@
 					cityId: Number,
 					name: String
 				}
-			}
+			},
+			date: String, 'YYYY-MM-DD'
 		}
 	}
 	Error:
