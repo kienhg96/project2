@@ -1,5 +1,5 @@
 /*
-	GET /api/user
+	GET /api/admin/getUsers
 	Request:
 		Query: {
 			page: Number, (0, 1, ...)

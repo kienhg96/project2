@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-	GET /api/city/cities
+	GET /api/city
 	Response: 
 	Success: {
 		error: OK,
