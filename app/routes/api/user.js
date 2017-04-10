@@ -13,5 +13,6 @@ router.get('/logout', deserializeUser, user.logout);
 router.route('/info')
 	.get(deserializeUser, user.getInfo)
 	.post(deserializeUser, user.updateInfo);
+router.post('/password', deserializeUser, user.updatePassword);
 
 module.exports = router;
