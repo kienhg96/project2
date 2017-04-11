@@ -8,6 +8,7 @@ const admin = require(global.__base + 'controllers/admin');
 
 // Authenticate
 router.post('/login', admin.login);
+router.post('/changePassword', admin.changePassword);
 router.get('/logout', deserializeAdmin, admin.logout);
 
 module.exports = router;
