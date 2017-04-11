@@ -56,8 +56,8 @@ class Category {
 	}
 
 	static findByName(name, callback) {
-		let query = 'SELECT * FROM category WHERE name = ?';
-		pool.query(query, [name], (err, rows) => {
+		let query = 'SELECT * FROM category WHERE name LIKE ?';
+		pool.query(query, ['%' + name + '%'], (err, rows) => {
 			if (err) {
 				return callback(err);
 			}
