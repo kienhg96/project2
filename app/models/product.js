@@ -19,6 +19,7 @@ class Product {
 		this._isVerified = props.isVerified || 0;
 		this._userId = props.userId;
 		this._images = props.images || [];
+		this._categories = props.categories || [];
 	}
 
 	get productId() { return this._productId; }
@@ -36,9 +37,13 @@ class Product {
 		});
 		return result;
 	}
+	get categories() { return this._categories; }
 
 	set images(images) {
 		this._images = images;
+	}
+	set categories(categories) {
+		this._categories = categories;
 	}
 
 	rawData() {
@@ -75,7 +80,8 @@ class Product {
 			date: this.date,
 			isSold: this.isSold,
 			isVerified: this.isVerified,
-			images: this.images
+			images: this.images,
+			categories: this.categories
 		};
 		User.findById(this._userId, (err, user) => {
 			if (err) {
@@ -115,9 +121,28 @@ class Product {
 		});
 	}
 
+	addCategory(category, callback) {
+		if (this._categories.indexOf(category) > -1) {
+			return callback(null);
+		}
+		this._categories.push(category);
+		let info = {
+			categoryId: category.categoryId,
+			productId: this._productId
+		};
+		let query = 'INSERT INTO categorylink SET ?';
+		pool.query(query, [info], (err, result) => {
+			if (err) {
+				return callback(err);
+			}
+			return callback(null);
+		});	
+	}
+
 	static findById(productId, callback) {
 		const ProductImage = require(global.__base + 'models/product-image');
-
+		const Category = require(global.__base + 'models/category');
+		
 		let query = 'SELECT * FROM product WHERE productId = ?';
 		pool.query(query, [productId], (err, rows) => {
 			if (err) {
@@ -127,12 +152,20 @@ class Product {
 				return callback(null, null);
 			}
 			let product = new Product(rows[0]);
-			ProductImage.findByProductId(productId, (err, result) => {
+			// Categories
+			Category.findByProductId(productId, (err, categories) => {
 				if (err) {
 					return callback(err);
 				}
-				product.images = result;
-				return callback(null, product);
+				product.categories = categories;
+				// Images
+				ProductImage.findByProductId(productId, (err, images) => {
+					if (err) {
+						return callback(err);
+					}
+					product.images = images;
+					return callback(null, product);
+				});
 			});
 		});	
 	}
