@@ -38,7 +38,7 @@ class Category {
 			}
 			let result = [];
 			rows.forEach((row) => {
-				result.push(Object.assign({}, rows[0]));
+				result.push(Object.assign({}, row));
 			});
 			return callback(null, result);
 		});
@@ -53,7 +53,7 @@ class Category {
 			}
 			let result = [];
 			rows.forEach((row) => {
-				result.push(Object.assign({}, rows[0]));
+				result.push(Object.assign({}, row));
 			});
 			return callback(null, result);
 		});

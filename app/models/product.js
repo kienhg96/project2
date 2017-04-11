@@ -32,7 +32,7 @@ class Product {
 	get userId() { return this._userId; }
 	get images() { 
 		let result = [];
-		images.forEach((imgName) => {
+		this._images.forEach((imgName) => {
 			result.push(IMAGE_BASE_PATH + this._productId + '/' + imgName);
 		});
 		return result;
@@ -148,7 +148,7 @@ class Product {
 			if (err) {
 				return callback(err);
 			}
-			if (!product) {
+			if (!rows[0]) {
 				return callback(null, null);
 			}
 			let product = new Product(rows[0]);
@@ -169,7 +169,6 @@ class Product {
 			});
 		});	
 	}
-
 };
 
 module.exports = Product;

@@ -16,9 +16,10 @@
 						cityId: Number,
 						name: String
 					}
-				}
-			},
-			date: String, 'YYYY-MM-DD'
+				},
+				date: String, 'YYYY-MM-DD'
+			}
+			
 		}
 		Error: 
 			INTERNAL_ERROR
