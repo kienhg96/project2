@@ -67,6 +67,20 @@ class Category {
 			return callback(null, new Category(rows[0]));
 		});
 	}
+
+	static findAll(callback) {
+		let query = 'SELECT * FROM category';
+		pool.query(query, [name], (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			let result = [];
+			rows.forEach((row) => {
+				result.push(new Category(row));
+			});
+			return callback(null, result);
+		});
+	}
 }
 
 module.exports = Category;
