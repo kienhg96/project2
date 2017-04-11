@@ -14,8 +14,8 @@ class City {
 
 	rawData() {
 		return {
-			cityId: this.cityId,
-			name: this.name
+			cityId: this._cityId,
+			name: this._name
 		};
 	}
 
@@ -35,8 +35,8 @@ class City {
 
 	toJSON(callback) {
 		return callback(null, {
-			cityId: this.cityId,
-			name: this.name
+			cityId: this._cityId,
+			name: this._name
 		});
 	}
 
@@ -59,7 +59,7 @@ class City {
 				return callback(null, city);
 			});
 		});
-	} 
+	}
 
 	static findAll(callback) {
 		pool.getConnection((err, conn) => {
@@ -79,7 +79,6 @@ class City {
 						name: row.name
 					});
 				});
-
 				return callback(null, cities);
 			});
 		});
