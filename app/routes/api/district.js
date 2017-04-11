@@ -7,5 +7,4 @@ const district = require(global.__base + 'controllers/district');
 
 router.route('/')
 	.get(district.getDistricts);
-	
 module.exports = router;

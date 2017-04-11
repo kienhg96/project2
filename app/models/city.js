@@ -9,6 +9,12 @@ class City {
 		this._name = props.name;
 	}
 
+<<<<<<< HEAD
+=======
+	get cityId() { return this._cityId; }
+	get name() { return this._name; }
+
+>>>>>>> 37ee1a09d14b0e18c4ce291d6d254a1224365cbe
 	rawData() {
 		return {
 			cityId: this._cityId,

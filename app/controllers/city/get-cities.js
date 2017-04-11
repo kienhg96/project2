@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-	GET /api/city/cities
+	GET /api/city
 	Response: 
 	Success: {
 		error: OK,
@@ -13,6 +13,7 @@
 	}
 	Error:
 		INTERNAL_ERROR
+		IS_NOT_AUTHENTICATED
 
 */
 
