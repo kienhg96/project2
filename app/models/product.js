@@ -110,30 +110,31 @@ class Product {
 	addImage(imageData, callback) {
 		const ProductImage = require(global.__base + 'models/product-image');
 
-		let imageName = this._productId + '-' + Date.now() + '.png';
-		let filePath = path.join(imageConfig.productImage, imageName);
+		let imgName = this._productId + '-' + Date.now() + '.png';
+		let filePath = path.join(imageConfig.productImage, imgName);
 		// Save image
 		saveBase64(filePath, imageData, (err) => {
 			if (err) {
 				return callback(err);
 			}
-			this._images.push(imageName);
+			this._images.push(imgName);
 			// Save file name
-			ProductImage.addImage(this._productId, imageName, callback);
+			ProductImage.addImage(this._productId, imgName, callback);
 		});
 	}
 
-	addImageName(imageData, imageName, callback) {
+	addImageName(imageData, imgName, callback) {
 		const ProductImage = require(global.__base + 'models/product-image');
-		let filePath = path.join(imageConfig.productImage, imageName);
+
+		let filePath = path.join(imageConfig.productImage, imgName);
 		// Save image
 		saveBase64(filePath, imageData, (err) => {
 			if (err) {
 				return callback(err);
 			}
-			this._images.push(imageName);
+			this._images.push(imgName);
 			// Save file name
-			ProductImage.addImage(this._productId, imageName, callback);
+			ProductImage.addImage(this._productId, imgName, callback);
 		});
 	}
 
@@ -145,8 +146,8 @@ class Product {
 		let count = 0;
 		// let error = null;
 		for (let i in imageDataArr) {
-			let imageName = this._productId + '-' + Date.now() + '.png'; 
-			this.addImageName(imageDataArr[i], imageName, (err) => {
+			let imgName = this._productId + '-' + Date.now() + '.png'; 
+			this.addImageName(imageDataArr[i], imgName, (err) => {
 				if (err) {
 					// error = err;
 					return callback(err);
@@ -174,15 +175,15 @@ class Product {
 		});
 	}
 
-	deleteImages(imageNames, callback) {
-		let n = imageNames.length;
+	deleteImages(imgNames, callback) {
+		let n = imgNames.length;
 		if (n === 0) {
 			return callback(null);
 		}
 		let count = 0;
 		// let error = null;
-		for (let i in imageNames) {
-			this.deleteImage(imageNames[i], (err) => {
+		for (let i in imgNames) {
+			this.deleteImage(imgNames[i], (err) => {
 				if (err) {
 					return callback(err);
 				}
@@ -195,6 +196,8 @@ class Product {
 	}
 
 	addCategory(category, callback) {
+		const Category = require(global.__base + 'models/category');
+
 		for (let i in this._categories) {
 			if (this._categories[i].categoryId === category.categoryId) {
 				return callback(null);
@@ -205,13 +208,7 @@ class Product {
 			categoryId: category.categoryId,
 			productId: this._productId
 		};
-		let query = 'INSERT INTO categorylink SET ?';
-		pool.query(query, [info], (err, result) => {
-			if (err) {
-				return callback(err);
-			}
-			return callback(null);
-		});	
+		Category.add(info, callback);
 	}
 
 	addCategoryById(categoryId, callback) {
@@ -265,27 +262,6 @@ class Product {
 			return callback(null);
 		});
 	}
-
-	// deleteCategory(categoryId, callback) {
-	// 	let query = 'DELETE FROM categorylink WHERE productId = ? AND categoryId = ?';
-	// 	pool.query(query, [this._productId, categoryId], callback);
-	// }
-
-	// deleteCategories(categoryIdArr, callback) {
-	// 	let n = categoryIdArr.length;
-	// 	let count = 0;
-	// 	for (let i in categoryIdArr) {
-	// 		this.deleteCategory(categoryIdArr[i], (err) => {
-	// 			if (err) {
-	// 				return callback(err);
-	// 			}
-	// 			count++;
-	// 			if (count === n) {
-	// 				return callback(null);
-	// 			}
-	// 		});
-	// 	}
-	// }
 
 	remove(callback) {
 		const ProductImage = require(global.__base + 'models/product-image');
@@ -459,13 +435,13 @@ class Product {
 			rows.forEach((row, i) => {
 				let product = new Product(row);
 				// Categories
-				Category.findByProductId(productId, (err, categories) => {
+				Category.findByProductId(product.productId, (err, categories) => {
 					if (err) {
 						return callback(err);
 					}
 					product.categories = categories;
 					// Images
-					ProductImage.findByProductId(productId, (err, images) => {
+					ProductImage.findByProductId(product.productId, (err, images) => {
 						if (err) {
 							return callback(err);
 						}
@@ -481,7 +457,156 @@ class Product {
 		});
 	}
 
-	static find(queryObj, callback) {
+	static findByCategoryAndDistrict(categoryId, districtId, page, callback) {
+		const ProductImage = require(global.__base + 'models/product-image');
+		const Category = require(global.__base + 'models/category');
+
+		let query = 'SELECT product.* FROM product, user, categorylink' +
+				' WHERE product.userId = user.userId AND categorylink.productId = product.productId' +
+				' AND categorylink.categoryId = ?' +
+				' AND user.districtId = ?' +
+				' ORDER BY date DESC LIMIT ? OFFSET ?';
+		pool.query(query, [categoryId, districtId, PAGE_LENGTH, page * PAGE_LENGTH], (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			if (!rows[0]) {
+				return callback(null, []);
+			}
+			let result = [];
+			let count = 0;
+			let n = rows.length;
+			rows.forEach((row, i) => {
+				let product = new Product(row);
+				// Categories
+				Category.findByProductId(product.productId, (err, categories) => {
+					if (err) {
+						return callback(err);
+					}
+					product.categories = categories;
+					// Images
+					ProductImage.findByProductId(product.productId, (err, images) => {
+						if (err) {
+							return callback(err);
+						}
+						product.images = images;
+						result[i] = product;
+						count++;
+						if (count === n) {
+							return callback(null, result);
+						}
+					});
+				});
+			});
+		});
+	}
+
+	static find(queryObj, page, callback) {
+		const ProductImage = require(global.__base + 'models/product-image');
+		const Category = require(global.__base + 'models/category');
+
+		let tableList = ['product', 'user'];
+		let joinConditions = [' product.userId = user.userId '];
+		let queryList = [];
+		let valueList = [];
+		if (queryObj.userId) {
+			queryList.push(' user.userId = ? ');
+			valueList.push(queryObj.userId);
+		}
+		if (queryObj.districtId) {
+			queryList.push(' user.districtId = ? ');
+			valueList.push(queryObj.districtId);
+		}
+		if (queryObj.categoryId) {
+			tableList = ['product', 'user', 'categorylink'];
+			joinConditions = [' product.userId = user.userId ', ' categorylink.productId = product.productId '];
+			queryList.push(' categorylink.categoryId = ? ');
+			valueList.push(queryObj.categoryId);
+		}
+		if (queryObj.name) {
+			queryList.push(' product.name LIKE ? ');
+			valueList.push('%' + queryObj.name + '%');
+		}
+		if (queryObj.maxPrice) {
+			queryList.push(' product.price <= ? ');
+			valueList.push(queryObj.maxPrice);
+		}
+		if (queryObj.minPrice) {
+			queryList.push(' product.price >= ? ');
+			valueList.push(queryObj.minPrice);
+		}
+		if (queryObj.date) {
+			queryList.push(' product.date >= ? ');
+			valueList.push(queryObj.date);
+		}
+		let orderBy = ' productId ';
+		let sort = ' DESC ';
+		switch (queryObj.orderBy) {
+			case 'productId':
+				orderBy = ' product.productId ';
+				break;
+			case 'price':
+				orderBy = ' price ';
+				break;
+			case 'date':
+				orderBy = ' product.roductId ';
+				break;
+			case 'categoryId':
+				orderBy = ' categorylink.categoryId ';
+				break;
+			case 'name': 
+				orderBy = ' product.name ';
+				break; 
+			default:
+				orderBy = ' product.productId ';
+		}
+		if (queryObj.sort === ' ASC ') {
+			sort = ' ASC ';
+		}
+
+		let query = 'SELECT * FROM ' + tableList.join(', ') + 
+				' WHERE ' + joinConditions.join(' AND' );
+		if (queryList.length === 0) {
+			query += ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?'; 
+		} else {
+			query += ' AND ' + queryList.join(' AND ') + 
+					' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
+		}
+		valueList.push(PAGE_LENGTH);
+		valueList.push(page * PAGE_LENGTH);
+		pool.query(query, valueList, (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			if (!rows[0]) {
+				return callback(null, []);
+			}
+			let result = [];
+			let count = 0;
+			let n = rows.length;
+			rows.forEach((row, i) => {
+				let product = new Product(row);
+				// Categories
+				Category.findByProductId(product.productId, (err, categories) => {
+					if (err) {
+						return callback(err);
+					}
+					product.categories = categories;
+					// Images
+					ProductImage.findByProductId(product.productId, (err, images) => {
+						if (err) {
+							return callback(err);
+						}
+						product.images = images;
+						result[i] = product;
+						count++;
+						if (count === n) {
+							return callback(null, result);
+						}
+					});
+				});
+			});
+		});
 	}
 };
 

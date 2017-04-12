@@ -66,6 +66,11 @@ class Category {
 		});
 	}
 
+	static add(categoryLinkObj, callback) {
+		let query = 'INSERT INTO categorylink SET ?';
+		pool.query(query, categoryLinkObj, callback);
+	}
+
 	static deleteByProductId(productId, callback) {
 		let query = 'DELETE FROM categorylink WHERE productId = ?';
 		pool.query(query, [productId], callback);
