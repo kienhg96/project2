@@ -1,6 +1,6 @@
 'use strict';
 
-const getList = require('./getList');
+const getList = require('./get-list')
 
 let city = {
 	getList: getList

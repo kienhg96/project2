@@ -9,14 +9,10 @@ class City {
 		this._name = props.name;
 	}
 
-	get cityId() { return this._cityId; }
-
-	get name() { return this._name; }
-
 	rawData() {
 		return {
-			cityId: this.cityId,
-			name: this.name
+			cityId: this._cityId,
+			name: this._name
 		};
 	}
 
@@ -36,8 +32,8 @@ class City {
 
 	toJSON(callback) {
 		return callback(null, {
-			cityId: this.cityId,
-			name: this.name
+			cityId: this._cityId,
+			name: this._name
 		});
 	}
 
@@ -60,14 +56,26 @@ class City {
 				return callback(null, city);
 			});
 		});
-	} 
-	static findAll(callback) {
-		// ...
-		const rows = [
-			{id: 1, name: 'Hanoi'}, 
-			{id: 2, name: 'Haiphong'}
-		]
-		return callback(null, rows);
+	}
+
+	static showAllList(callback){
+		pool.getConnection(function(err, conn){
+			if (err) return callback(null);
+
+			let query = 'SELECT * FROM city';
+			conn.query(query, function(err, rows){
+				conn.release();
+				if (err) return callback(err);
+
+				let cities = [];
+				for(let i = 0; i < rows.length; ++i){
+					let props = Object.assign({}, rows[i]);
+					let city = new City(props);
+					cities.push(city);
+				}
+				return callback(null, cities);
+			});
+		});
 	}
 }
 

@@ -6,6 +6,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { connect } from 'react-redux';
 import { signup } from '../../actions/authenticate';
+import $ from 'jquery';
 
 const style = {
 	margin: '40px auto',
@@ -18,9 +19,19 @@ class Signup extends Component {
 		this.state = {
 			phone: '', 
 			email: '', 
-			password: ''
+			password: '',
+			city: 1,
+			cityList: []
 		}
 		this.signup = this.signup.bind(this);
+	}
+
+	componentDidMount() {
+		$.get('/api/city/list', data => {
+			this.setState({
+				cityList: data.data
+			});
+		});
 	}
 
 	signup() {
@@ -85,19 +96,22 @@ class Signup extends Component {
 							floatingLabelText="Tỉnh/Thành phố"
 							fullWidth={true}
 							maxHeight={200}
-							value={5}
+							value={this.state.city}
+							onChange={(e, i, v) => {
+								this.setState({
+									city: v
+								});
+							}}
 						>
-							<MenuItem value={1} primaryText="Hà Nội" />
-							<MenuItem value={2} primaryText="Tp.Hồ Chí Minh" />
-							<MenuItem value={3} primaryText="Đà Nẵng" />
-							<MenuItem value={4} primaryText="Hải Phòng" />
-							<MenuItem value={5} primaryText="Cần Thơ" />
+						{this.state.cityList.map(city => (
+							<MenuItem key={city.cityId} value={city.cityId} primaryText={city.name} />
+						))}	
 						</SelectField>
 						<SelectField
 							floatingLabelText="Quận/Huyện"
 							fullWidth={true}
 							maxHeight={200}
-							value={5}
+							
 						>
 							<MenuItem value={1} primaryText="Hà Nội" />
 							<MenuItem value={2} primaryText="Tp.Hồ Chí Minh" />
