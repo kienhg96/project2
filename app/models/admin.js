@@ -84,6 +84,37 @@ class Admin {
 			return callback(null);
 		});
 	}
+
+	static deleteUser(userId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) return callback(err);
+			let query = 'DELETE FROM user WHERE userId = ?';
+			conn.query(query, [userId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteProduct(productId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM product WHERE productId = ?';
+			conn.query(query, [productId], function(err, result) {
+				conn.release();
+				if (err){
+					return callback(err);
+				}
+				return callback(null);
+			})
+		});
+	}
 }
 
 module.exports = Admin;
