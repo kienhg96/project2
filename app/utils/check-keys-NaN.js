@@ -3,7 +3,7 @@
 let CheckKeysNaN = (obj, keys) => {
 	if (Array.isArray(keys)) {
 		for (let i = 0; i < keys.length; i++) {
-			if (isNaN(obj[keys[i]])) {
+			if (isNaN(parseInt(obj[keys[i]]), 10)) {
 				return i;
 			}
 		}

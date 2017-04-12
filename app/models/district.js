@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/config/database/mysql/pool');
+const pool = require(global.__base + 'config/database/mysql');
 const City = require('./city');
 
 class District {
@@ -78,6 +78,20 @@ class District {
 				let district = new District(props);
 				return callback(null, district);
 			});
+		});
+	}
+
+	static findAll(callback) {
+		let query = 'SELECT * FROM district';
+		pool.query(query, [], (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			let districts = [];
+			rows.forEach((row, i) => {
+				districts.push(new District(row));
+			});
+			return callback(null, districts);
 		});
 	}
 }

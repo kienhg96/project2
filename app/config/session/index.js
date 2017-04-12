@@ -2,7 +2,7 @@
 
 const expressSession = require('express-session');
 const RedisStore = require('connect-redis')(expressSession);
-const redisClient = require(global.__base + 'app/config/database/redis/redis-client');
+const redisClient = require(global.__base + 'config/database/redis');
 
 const ttl = 3600 * 24 * 7; // 7 days
 

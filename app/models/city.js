@@ -1,6 +1,6 @@
 'use strict';
 
-const pool = require(global.__base + 'app/config/database/mysql/pool');
+const pool = require(global.__base + 'config/database/mysql');
 
 class City {
 
@@ -8,6 +8,9 @@ class City {
 		this._cityId = props.cityId;
 		this._name = props.name;
 	}
+
+	get cityId() { return this._cityId; }
+	get name() { return this._name; }
 
 	rawData() {
 		return {
@@ -58,21 +61,29 @@ class City {
 		});
 	}
 
-	static showAllList(callback){
-		pool.getConnection(function(err, conn){
-			if (err) return callback(null);
-
+	static findAll(callback) {
+		pool.getConnection((err, conn) => {
+			if (err) {
+				return callback(err);
+			}
 			let query = 'SELECT * FROM city';
-			conn.query(query, function(err, rows){
+			pool.query(query, [], (err, rows) => {
 				conn.release();
+<<<<<<< HEAD
 				if (err) return callback(err);
 
-				let cities = [];
-				for(let i = 0; i < rows.length; ++i){
-					let props = Object.assign({}, rows[i]);
-					let city = new City(props);
-					cities.push(city);
+=======
+				if (err) {
+					return callback(err);
 				}
+>>>>>>> 91e4735dbb4bb013785765a6f8ae9f1d65ff435e
+				let cities = [];
+				rows.forEach((row, i) => {
+					cities.push({
+						cityId: row.cityId,
+						name: row.name
+					});
+				});
 				return callback(null, cities);
 			});
 		});

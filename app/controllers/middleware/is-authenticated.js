@@ -1,16 +1,21 @@
 'use strict';
 
-const User = require(global.__base + 'app/models/user');
+const errTypes = require(global.__base + 'config/error');
 
 let isAuthenticated = (req, res, next) => {
 	let userId = req.session.userId;
 	if (userId === null || userId === undefined) {
-		req.session.destroy();
-
-		return res.status(400).json({ errCode: -4, msg: 'User not login yet' });
+		let admin = req.session.admin;
+		if (admin === null || userId === undefined) {
+			req.session.destroy();
+			return res.result(400, errTypes.IS_NOT_AUTHENTICATED, 'User not logged in yet');
+		} 
+		req.isAuthenticated = true;
+		next();
+	} else {
+		req.isAuthenticated = true;
+		next();
 	}
-
-	next();
 };
 
 module.exports = isAuthenticated;

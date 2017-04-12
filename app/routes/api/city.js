@@ -3,8 +3,10 @@
 const express = require('express');
 const router = express.Router();
 
-const cityController = require(global.__base + 'app/controllers/city/index');
+const city = require(global.__base + 'controllers/city');
+const isAuthenticated = require(global.__base + 'controllers/middleware/is-authenticated');
 
-router.get('/list', cityController.getList);
+router.route('/')
+	.get(isAuthenticated, city.getCities);
 
 module.exports = router;

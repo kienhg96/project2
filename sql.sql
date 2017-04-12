@@ -80,3 +80,17 @@ alter table commentlink add constraint fk_cmtlink_product foreign key (productId
 --
 alter table user add column fullName VARCHAR(128);
 alter table user modify column password varchar(128);
+
+-- 2017-04-10
+CREATE TABLE `project2`.`productimage` (
+  imageId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  productId INT NOT NULL,
+  name VARCHAR(32),
+  CONSTRAINT fk_productimage_productId FOREIGN KEY (productId) REFERENCES `project2`.product(productId)
+);
+--
+ALTER TABLE `project2`.product 
+  DROP COLUMN districtId;
+-- 
+ALTER TABLE `project2`.user 
+  ADD COLUMN `date` date;

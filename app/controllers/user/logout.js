@@ -1,10 +1,22 @@
+/*
+	GET /api/user/logout
+	Success: {
+		error: 'OK',
+		message: String,
+		data: {}
+	}
+	Error: 
+		INTERNAL_ERROR
+		IS_NOT_AUTHENTICATED
+*/
+
 'use strict';
 
-const User = require(global.__base + 'app/models/user');
+const errTypes = require(global.__base + 'config/error');
 
 let logout = (req, res) => {
 	req.session.destroy();
-	return res.json({ errCode: 0, msg: 'Success', data: {}});
+	return res.result(200, errTypes.OK, 'OK', {});
 };
 
 module.exports = logout;
