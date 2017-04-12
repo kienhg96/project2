@@ -42,6 +42,9 @@ module.exports = function(req, res) {
     	if (!admin) {
     		return res.result(404, errTypes.ADMIN_NOT_FOUND, 'Admin not found');
     	}
+    	if (!admin.comparePassword(password)) {
+    		return res.result(404, errTypes.WRONG_PASSWORD, 'Wrong password');
+    	}
     	admin.toJSON((err, adminJSON) => {
     		if (err) {
 	    		return res.error(err);

@@ -35,7 +35,7 @@ class Admin {
 				return callback(null);
 			});
 		});
-	} 
+	}
 
 	toJSON(callback) {
 		return callback(null, {
@@ -72,6 +72,48 @@ class Admin {
 			return false;
 		}
 		return result;
+	}
+
+	updatePassword(newPassword, callback) {
+		this._password = bcrypt.hashSync(newPassword);
+		let query = 'UPDATE admin SET password = ? WHERE username = ?';
+		pool.query(query, [this._password, this._username], (err, result) => {
+			if (err) {
+				return callback(err);
+			}
+			return callback(null);
+		});
+	}
+
+	static deleteUser(userId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) return callback(err);
+			let query = 'DELETE FROM user WHERE userId = ?';
+			conn.query(query, [userId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteProduct(productId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM product WHERE productId = ?';
+			conn.query(query, [productId], function(err, result) {
+				conn.release();
+				if (err){
+					return callback(err);
+				}
+				return callback(null);
+			})
+		});
 	}
 }
 

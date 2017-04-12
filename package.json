@@ -24,6 +24,8 @@
     "express-session": "^1.15.1",
     "mysql": "^2.13.0",
     "optimist": "^0.6.1",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "moment": "^2.10.0",
+    "sendgrid": "^5.0.0"
   }
 }
