@@ -1,8 +1,7 @@
-import { combineReducers } from 'redux';
-import { routerReducer as routing } from 'react-router-redux';
-import user from './user';
-import notifycation from './notifycation';
+import { routerReducer } from 'react-router-redux';
 
-export default combineReducers({
-    routing, user, notifycation
-});
+export default (state = {}, action) => {
+	return {
+		router: routerReducer(state.router, action)
+	};
+};

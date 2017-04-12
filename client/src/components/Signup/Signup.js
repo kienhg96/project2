@@ -4,16 +4,22 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import { connect } from 'react-redux';
-import { signup } from '../../actions/authenticate';
-import $ from 'jquery';
 
 const style = {
-	margin: '40px auto',
-	maxWidth: '500px'
+	container: {
+		margin: '40px auto',
+		maxWidth: 500
+	},
+	wrapper: {
+		padding: 20
+	},
+	title: {
+		textAlign: 'center',
+		fontWeight: 500
+	}
 };
 
-class Signup extends Component {
+export default class Signup extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -21,51 +27,59 @@ class Signup extends Component {
 			email: '', 
 			password: '',
 			city: 1,
-			cityList: []
+			cityList: [{
+				cityId: 1,
+				name: 'Hà Nội'
+			},{
+				cityId: 2,
+				name: 'Hải Phòng'
+			}]
 		}
-		this.signup = this.signup.bind(this);
+		this.handleFormSubmit = this.handleFormSubmit.bind(this);
+		this.handlePhoneChange = this.handlePhoneChange.bind(this);
+		this.handleEmailChange = this.handleEmailChange.bind(this);
+		this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		this.handleCityChange = this.handleCityChange.bind(this);
 	}
 
 	componentDidMount() {
-		$.get('/api/city/list', data => {
-			this.setState({
-				cityList: data.data
-			});
-		});
 	}
 
-	signup() {
-		this.props.signup(this.state);
+	handleFormSubmit(e) {
+		e.preventDefault();
+	}
+
+	handlePhoneChange(e, phone) {
+		this.setState({phone});
+	}
+
+	handleEmailChange(e, email) {
+		this.setState({email});
+	}
+
+	handlePasswordChange(e, password) {
+		this.setState({password});
+	}
+
+	handleCityChange(e, i, city) {
+		this.setState({city});
 	}
 
 	render() {
-		const {
-			phone, email, password
-		} = this.state;
-
+		const { phone, email, password } = this.state;
+		const { handleFormSubmit, handlePhoneChange,
+				handleEmailChange, handlePasswordChange,
+				handleCityChange } = this;
 		return (
-			<div style={style}>
-				<Paper zDepth={3} style={{
-					padding: '20px'
-				}}>
-					<h1 style={{
-						textAlign: 'center'
-					}}>Đăng ký</h1>
-					<form onSubmit={e => {
-						e.preventDefault();
-						this.signup();
-					}}>
+			<div style={style.container}>
+				<Paper zDepth={3} style={style.wrapper}>
+					<h1 style={style.title}>Đăng ký</h1>
+					<form onSubmit={handleFormSubmit}>
 						<TextField
 							floatingLabelText="Số điện thoại"
 							fullWidth={true}
 							value={phone}
-							onChange={(e, v) => {
-								if (!isNaN(v)) {
-									this.setState({
-										phone: v
-									});
-								}
-							}}
+							onChange={handlePhoneChange}
 						>
 						</TextField>
 						<TextField
@@ -73,11 +87,7 @@ class Signup extends Component {
 							fullWidth={true}
 							type="email"
 							value={email}
-							onChange={(e, v) => {
-								this.setState({
-									email: v
-								})
-							}}
+							onChange={handleEmailChange}
 						>
 						</TextField>
 						<TextField
@@ -85,11 +95,7 @@ class Signup extends Component {
 							fullWidth={true}
 							type="password"
 							value={password}
-							onChange={(e, v) => {
-								this.setState({
-									password: v
-								})
-							}}
+							onChange={handlePasswordChange}
 						>
 						</TextField>
 						<SelectField
@@ -97,11 +103,7 @@ class Signup extends Component {
 							fullWidth={true}
 							maxHeight={200}
 							value={this.state.city}
-							onChange={(e, i, v) => {
-								this.setState({
-									city: v
-								});
-							}}
+							onChange={handleCityChange}
 						>
 						{this.state.cityList.map(city => (
 							<MenuItem key={city.cityId} value={city.cityId} primaryText={city.name} />
@@ -130,9 +132,3 @@ class Signup extends Component {
 		)
 	}
 }
-
-export default connect(state => ({
-
-}), {
-	signup
-})(Signup);
