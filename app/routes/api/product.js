@@ -17,5 +17,7 @@ router.route('/user/add')
 router.route('/user/:productId')
 	.put(deserializeUser, product.user.updateProduct)
 	.delete(deserializeUser, product.user.deleteProduct);
+router.route('/')
+	.get(product.getProducts);
 
 module.exports = router;
