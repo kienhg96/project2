@@ -1,9 +1,15 @@
 'use strict';
 
+const path = require('path');
 const pool = require(global.__base + 'config/database/mysql');
 const moment = require('moment');
 const bcrypt = require('bcrypt-nodejs');
+const saveBase64 = require(global.__base + 'utils/save-base64');
+const imageConfig = require(global.__base + 'config/image');
+
 const PAGE_LENGTH = 15;
+const IMAGE_BASE_PATH = '/image/user/avatar/';
+const DEFAULT_IMG = 'default.png';
 
 class User {
 
@@ -19,6 +25,11 @@ class User {
 			this._password = bcrypt.hashSync(props.password || "");
 		}
 		this._date = moment(props.date).format('YYYY-MM-DD');
+		if (props.avatarData) {
+			this._tmpAvatar = props.avatarData;
+		} else {
+			this._avatar = props.avatar;
+		}
 	}
 
 	get userId() { return this._userId; }
@@ -28,6 +39,13 @@ class User {
 	get districtId() { return this._districtId; }
 	get date() { return this._date; }
 	get rating() { return this._rating; }
+	get avatar() { 
+		if (this._avatar) {
+			return path.join(IMAGE_BASE_PATH, this._avatar);
+		} else {
+			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG);
+		}
+	}
 
 	rawData() {
 		return {
@@ -36,8 +54,27 @@ class User {
 			email: this._email,
 			fullName: this._fullName,
 			districtId: this._districtId,
-			date: this._date
+			date: this._date,
+			avatar: this._avatar
 		};
+	}
+
+	setAvatar(avatarData, callback) {
+		let fileName = this._userId + '.png';
+		let filePath = path.join(imageConfig.userAvatar, fileName);
+		saveBase64(filePath, avatarData, (err) => {
+			if (err) {
+				return callback(err);
+			}
+			this._avatar = fileName;
+			let query = 'UPDATE user SET avatar = ? WHERE userId = ?';
+			pool.query(query, [this._avatar, this._userId], (err, result) => {
+				if (err) {
+					return callback(err);
+				}
+				return callback(null);
+			});
+		});
 	}
 
 	save(callback) {
@@ -50,7 +87,16 @@ class User {
 				if (err) { return callback(err); }
 
 				this._userId = result.insertId;
-				callback(null);
+				if (this._tmpAvatar) {
+					this.setAvatar(this._tmpAvatar, (err) => {
+						if (err) {
+							return callback(err);
+						}
+						return callback(null);
+					});
+				} else {
+					return callback(null);
+				}
 			});
 		});
 	} 
@@ -63,7 +109,8 @@ class User {
 			phone: this.phone,
 			email: this.email,
 			fullName: this.fullName,
-			date: this.date
+			date: this.date,
+			avatar: this.avatar
 		};
 
 		District.findById(this.districtId, (err, district) => {

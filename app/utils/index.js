@@ -15,6 +15,8 @@ const distance = require('./distance');
 const sendMail = require('./send-mail');
 const sendOnesignalNoti = require('./send-onesignal-noti');
 const handleCity = require('./handle-city');
+const deleteFile = require('./delete-file');
+const deleteFolder = require('./delete-folder');
 
 const utils = {
 	checkMail: checkMail,
@@ -31,7 +33,9 @@ const utils = {
 	distance: distance,
 	sendMail: sendMail,
 	sendOnesignalNoti: sendOnesignalNoti,
-	handleCity: handleCity
+	handleCity: handleCity,
+	deleteFile: deleteFile,
+	deleteFolder: deleteFolder
 };
 
 module.exports = utils;

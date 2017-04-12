@@ -32,6 +32,16 @@ class ProductImage {
 		});
 	}
 
+	static deleteImage(productId, imgName, callback) {
+		let query = 'DELETE FROM productimage WHERE productId = ? AND name = ?';
+		pool.query(query, [productId, imgName], callback);
+	}
+
+	static deleteImages(productId, callback) {
+		let query = 'DELETE FROM productimage WHERE productId = ?';
+		pool.query(query, [productId], callback);
+	}
+
 };
 
 module.exports = ProductImage;

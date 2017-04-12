@@ -8,7 +8,14 @@ const deserializeUser = require(global.__base + 'controllers/middleware/deserial
 const isAuthenticated = require(global.__base + 'controllers/middleware/is-authenticated');
 const product = require(global.__base + 'controllers/product');
 
-router.route('/:productId')
+router.route('/info/:productId')
 	.get(product.getProduct);
+router.route('/category')
+	.get(product.getCategories);
+router.route('/user/add')
+	.post(deserializeUser, product.user.addProduct);
+router.route('/user/:productId')
+	.put(deserializeUser, product.user.updateProduct)
+	.delete(deserializeUser, product.user.deleteProduct);
 
 module.exports = router;
