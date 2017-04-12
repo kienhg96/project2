@@ -69,14 +69,9 @@ class City {
 			let query = 'SELECT * FROM city';
 			pool.query(query, [], (err, rows) => {
 				conn.release();
-<<<<<<< HEAD
-				if (err) return callback(err);
-
-=======
 				if (err) {
 					return callback(err);
 				}
->>>>>>> 91e4735dbb4bb013785765a6f8ae9f1d65ff435e
 				let cities = [];
 				rows.forEach((row, i) => {
 					cities.push({
