@@ -70,7 +70,13 @@ class Comment {
 
 	update(content, callback) {
 		let query = 'UPDATE comment SET content = ? WHERE commentId = ?';
-		pool.query(query, [content, this._commentId], callback);
+		pool.query(query, [content, this._commentId], (err, result) => {
+			if (err) {
+				return callback(err);
+			}
+			this._content = content;
+			return callback(null);
+		});
 	}
 
 	remove(callback) {
@@ -121,6 +127,81 @@ class Comment {
 			});
 
 			return callback(null, result);
+		});
+	}
+
+	static find(queryObj, page, callback) {
+
+		let tableList = ['comment'];
+		// let joinConditions = [' product.userId = user.userId '];
+		let queryList = [];
+		let valueList = [];
+		if (queryObj.userId) {
+			queryList.push(' userId = ? ');
+			valueList.push(queryObj.userId);
+		}
+		if (queryObj.commentId) {
+			queryList.push(' commentId = ? ');
+			valueList.push(queryObj.commentId);
+		}
+		if (queryObj.productId) {
+			queryList.push(' productId = ? ');
+			valueList.push(queryObj.productId);
+		}
+		if (queryObj.content) {
+			queryList.push(' content LIKE ? ');
+			valueList.push('%' + queryObj.content + '%');
+		}
+		if (queryObj.dateTime) {
+			queryList.push(' dateTime >= ? ');
+			valueList.push(queryObj.dateTime);
+		}
+		let orderBy = ' commentId ';
+		let sort = ' DESC ';
+		switch (queryObj.orderBy) {
+			case 'productId':
+				orderBy = ' productId ';
+				break;
+			case 'dateTime':
+				orderBy = ' dateTime ';
+				break;
+			case 'userId':
+				orderBy = ' userId ';
+				break;
+			default:
+				orderBy = ' commentId ';
+		}
+		if (queryObj.sort === 'ASC') {
+			sort = ' ASC ';
+		}
+
+		let query = 'SELECT * FROM ' + 'comment';
+		if (queryList.length === 0) {
+			query += ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
+		} else {
+			query += ' WHERE ' + queryList.join(' AND ') + 
+					' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
+		}
+		valueList.push(PAGE_LENGTH);
+		valueList.push(page * PAGE_LENGTH);
+		pool.query(query, valueList, (err, rows) => {
+			if (err) {
+				return callback(err);
+			}
+			if (!rows[0]) {
+				return callback(null, []);
+			}
+			let result = [];
+			let count = 0;
+			let n = rows.length;
+			rows.forEach((row, i) => {
+				let comment = new Comment(row);
+				result[i] = comment;
+				count++;
+				if (count === n) {
+					return callback(null, result);
+				}
+			});
 		});
 	}
 

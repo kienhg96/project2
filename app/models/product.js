@@ -560,7 +560,7 @@ class Product {
 			default:
 				orderBy = ' product.productId ';
 		}
-		if (queryObj.sort === ' ASC ') {
+		if (queryObj.sort === 'ASC') {
 			sort = ' ASC ';
 		}
 
