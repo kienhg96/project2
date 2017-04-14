@@ -5,6 +5,7 @@ const getCategories = require('./get-categories');
 const getComments = require('./get-comments');
 const user = require('./user');
 const guestUser = require('./guest-user');
+const reportProduct = require('./report-product');
 
 module.exports = {
 	getProduct: getProduct,
@@ -12,5 +13,6 @@ module.exports = {
 	getCategories: getCategories,
 	getComments: getComments,
 	user: user,
-	guestUser: guestUser
+	guestUser: guestUser,
+	reportProduct: reportProduct
 };
