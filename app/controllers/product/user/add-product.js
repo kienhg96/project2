@@ -1,5 +1,5 @@
 /*
-	POST /api/product/user/add
+	POST /api/product/user
 	Request: 
 		Body: {
 			name: String,

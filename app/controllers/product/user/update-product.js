@@ -1,7 +1,8 @@
 /*
-	PUT /api/product/user/:productId
+	PUT /api/product/user
 	Request: 
 		Body: {
+            productId: Number,
 			name: String,
 			description: String,
 			price: Number,
@@ -69,7 +70,7 @@ const Category = require(global.__base + 'models/category');
 const utils = require(global.__base + 'utils');
 
 module.exports = (req, res) => {
-	Product.findById(req.params.productId, (err, product) => {
+	Product.findById(req.body.productId, (err, product) => {
 		if (err) {
     		return res.error(err);
     	}
