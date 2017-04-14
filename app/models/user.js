@@ -6,6 +6,7 @@ const moment = require('moment');
 const bcrypt = require('bcrypt-nodejs');
 const saveBase64 = require(global.__base + 'utils/save-base64');
 const imageConfig = require(global.__base + 'config/image');
+const randToken = require('rand-token');
 
 const PAGE_LENGTH = 15;
 const IMAGE_BASE_PATH = '/image/user/avatar/';
@@ -45,6 +46,12 @@ class User {
 		} else {
 			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG);
 		}
+	}
+
+	static get ANONYMOUS_USER() {
+		return new User({
+			userId: 1
+		});
 	}
 
 	rawData() {

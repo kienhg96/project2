@@ -118,3 +118,8 @@ ALTER TABLE project2.comment
   ADD CONSTRAINT fk_comment_productId FOREIGN KEY (productId) REFERENCES project2.product(productId);
 
 
+-- 
+ALTER TABLE project2.product
+  ADD COLUMN districtId INT,
+  ADD CONSTRAINT fk_product_districtId FOREIGN KEY (districtId) REFERENCES project2.district(districtId);
+

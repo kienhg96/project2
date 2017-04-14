@@ -5,6 +5,7 @@ const pool = require(global.__base + 'config/database/mysql');
 const IMAGE_BASE_PATH = '/image/product/';
 // const AVATAR = 'avatar.png';
 const PAGE_LENGTH = 15;
+const randToken = require('rand-token');
 const moment = require('moment');
 const saveBase64 = require(global.__base + 'utils/save-base64');
 const imageConfig = require(global.__base + 'config/image');
@@ -25,6 +26,7 @@ class Product {
 		this._userId = props.userId;
 		this._images = props.images || [];
 		this._categories = props.categories || [];
+		this._districtId = props.districtId; // Fuck
 	}
 
 	get productId() { return this._productId; }
@@ -43,6 +45,7 @@ class Product {
 		return result;
 	}
 	get categories() { return this._categories; }
+	get districtId() { return this._districtId; }
 
 	set images(images) {
 		this._images = images;
@@ -60,7 +63,8 @@ class Product {
 			date: this._date,
 			isSold: this._isSold,
 			isVerified: this._isVerified,
-			userId: this._userId
+			userId: this._userId,
+			districtId: this._districtId
 		};
 	}
 
@@ -77,6 +81,7 @@ class Product {
 
 	toJSON(callback) {
 		const User = require(global.__base + 'models/user');
+		const District = require(global.__base + 'models/district');
 
 		let data = {
 			productId: this.productId,
@@ -102,7 +107,21 @@ class Product {
 					return callback(err);
 				}
 				data.user = userJSON;
-				return callback(null, data);
+				District.findById(this._districtId, (err, district) => {
+					if (err) {
+						return callback(err);
+					}
+					if (!district) {
+						return callback(null, data);
+					}
+					district.toJSON((err, districtJSON) => {
+						if (err) {
+							return callback(err);
+						}
+						data.district = districtJSON;
+						return callback(null, data);
+					});
+				});
 			});
 		}); 
 	}	
@@ -295,12 +314,13 @@ class Product {
 		if (info === {}) {
 			return callback(null);
 		}
+		console.log(info)
 		let query = 'UPDATE product SET ? WHERE productId = ?';
 		pool.query(query, [info, this._productId], (err, result) => {
 			if (err) {
 				return callback(err);
 			}
-			let keys = ['name', 'description', 'price'];
+			let keys = ['name', 'description', 'price', 'districtId'];
 			for(let i in keys) {
 				if (info[keys[i]]) {
 					this['_' + keys[i]] = info[keys[i]];
@@ -386,6 +406,21 @@ class Product {
 		}
 	}
 
+	setKey(callback) {
+		const ProductKey = require(global.__base + 'models/redis/product-key');
+		
+		let key = ProductKey.generateKey(this._productId);
+		new ProductKey({
+			productId: this._productId,
+			key: key
+		}).save((err) => {
+			if (err) {
+				return callback(err);
+			}
+			return callback(null, key);
+		});
+	}
+
 	static findById(productId, callback) {
 		const ProductImage = require(global.__base + 'models/product-image');
 		const Category = require(global.__base + 'models/category');
@@ -461,10 +496,10 @@ class Product {
 		const ProductImage = require(global.__base + 'models/product-image');
 		const Category = require(global.__base + 'models/category');
 
-		let query = 'SELECT product.* FROM product, user, categorylink' +
-				' WHERE product.userId = user.userId AND categorylink.productId = product.productId' +
+		let query = 'SELECT product.* FROM product, categorylink' +
+				' WHERE categorylink.productId = product.productId' +
 				' AND categorylink.categoryId = ?' +
-				' AND user.districtId = ?' +
+				' AND districtId = ?' +
 				' ORDER BY date DESC LIMIT ? OFFSET ?';
 		pool.query(query, [categoryId, districtId, PAGE_LENGTH, page * PAGE_LENGTH], (err, rows) => {
 			if (err) {
@@ -514,7 +549,7 @@ class Product {
 			valueList.push(queryObj.userId);
 		}
 		if (queryObj.districtId) {
-			queryList.push(' user.districtId = ? ');
+			queryList.push(' districtId = ? ');
 			valueList.push(queryObj.districtId);
 		}
 		if (queryObj.categoryId) {
