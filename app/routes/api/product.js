@@ -16,7 +16,7 @@ router.route('/user')
 	.post(deserializeUser, product.user.addProduct)
 	.put(deserializeUser, product.user.updateProduct)
 	.delete(deserializeUser, product.user.deleteProduct);
-router.route('/guestUser')
+router.route('/guestuser')
 	.post(product.guestUser.addProduct)
 	.put(product.guestUser.updateProduct)
 	.delete(product.guestUser.deleteProduct);
