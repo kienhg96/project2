@@ -5,6 +5,7 @@
 			categoryId: int
 		}
 	response:
+		CAN_NOT_DELETE_CATEGORY
 
 */
 

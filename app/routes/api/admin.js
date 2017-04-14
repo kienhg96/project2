@@ -14,6 +14,10 @@ router.post('/deleteProduct', admin.deleteProduct);
 router.post('/deleteCity', admin.deleteCity);
 router.post('/deleteDistrict', admin.deleteDistrict);
 router.post('/deleteCategory', admin.deleteCategory);
+router.post('/deleteComment', admin.deleteComment);
+router.post('/addCity', admin.addCity);
+router.post('/addCategory', admin.addCategory);
+router.post('/addDistrict', admin.addDistrict);
 router.get('/logout', deserializeAdmin, admin.logout);
 
 module.exports = router;
