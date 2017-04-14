@@ -105,3 +105,21 @@ ALTER TABLE `project2`.user
 --
 ALTER TABLE project2.user 
   ADD COLUMN avatar VARCHAR(32);
+-- 2017-04-12
+ALTER TABLE project2.comment
+  DROP COLUMN date,
+  ADD COLUMN dateTime DATETIME;
+--
+DROP TABLE project2.commentlink;
+ALTER TABLE project2.comment
+  ADD COLUMN userId INT NOT NULL,
+  ADD COLUMN productId INT NOT NULL,
+  ADD CONSTRAINT fk_comment_userId FOREIGN KEY (userId) REFERENCES project2.user(userId),
+  ADD CONSTRAINT fk_comment_productId FOREIGN KEY (productId) REFERENCES project2.product(productId);
+
+
+-- 
+ALTER TABLE project2.product
+  ADD COLUMN districtId INT,
+  ADD CONSTRAINT fk_product_districtId FOREIGN KEY (districtId) REFERENCES project2.district(districtId);
+
