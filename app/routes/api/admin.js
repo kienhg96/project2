@@ -11,6 +11,9 @@ router.post('/login', admin.login);
 router.post('/changePassword', admin.changePassword);
 router.post('/deleteUser', admin.deleteUser);
 router.post('/deleteProduct', admin.deleteProduct);
+router.post('/deleteCity', admin.deleteCity);
+router.post('/deleteDistrict', admin.deleteDistrict);
+router.post('/deleteCategory', admin.deleteCategory);
 router.get('/logout', deserializeAdmin, admin.logout);
 
 module.exports = router;

@@ -115,6 +115,70 @@ class Admin {
 			})
 		});
 	}
+
+	static deleteCity(cityId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM city WHERE cityId = ?';
+			conn.query(query, [cityId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteDistrict(districtId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM district WHERE districtId = ?';
+			conn.query(query, [districtId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteCategory(categoryId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'SELECT * FROM categorylink WHERE categoryId = ?';
+			conn.query(query, [categoryId], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+				if (rows[0]) {
+					return callback('Exist');
+				}
+
+				query = 'DELETE FROM category WHERE categoryId = ?';
+				conn.query(query, [categoryId], function(err, result) {
+					conn.release();
+					if (err) {
+						return callback(err);
+					}
+
+					return callback(null);
+				});
+			});
+		});
+	}
 }
 
 module.exports = Admin;
