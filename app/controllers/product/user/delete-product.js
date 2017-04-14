@@ -1,5 +1,8 @@
 /*
-	DELETE /api/product/user/:productId
+	DELETE /api/product/user
+	Body: {
+		productId: Number
+	}
 	Response: 
 		Success: {
 			error: 'OK',
@@ -19,7 +22,7 @@ const Category = require(global.__base + 'models/category');
 const utils = require(global.__base + 'utils');
 
 module.exports = (req, res) => {
-	Product.findById(req.params.productId, (err, product) => {
+	Product.findById(req.body.productId, (err, product) => {
 		if (err) {
     		return res.error(err);
     	}

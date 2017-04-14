@@ -1,7 +1,8 @@
 /*
-	PUT /api/product/user/comment/:commentId
+	PUT /api/product/user/comment
 	Request: 
 		Body: {
+			commentId: Number,
 			content: String
 		}
 	Response: 
@@ -38,6 +39,9 @@ const utils = require(global.__base + 'utils');
 module.exports = (req, res) => {
 	if (!req.body.content) {
 		return res.result(400, errTypes.MISSING_ARGUMENT, 'Missing argument content');
+	}
+	if (!req.body.commentId) {
+		return res.result(400, errTypes.MISSING_ARGUMENT, 'Missing argument commentId');
 	}
 	let commentId = req.params.commentId;
 	Comment.findById(commentId, (err, comment) => {
