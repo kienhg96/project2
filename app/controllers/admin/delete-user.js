@@ -5,7 +5,6 @@
 			userId: int
 		}
 	response:
-
 */
 'use strict'
 
