@@ -68,5 +68,20 @@ export default {
 	},
 	commentWrapper: {
 
+	},
+	cmtDate: {
+		color: '#7f8c8d',
+		fontSize: 14
+	},
+	cmtUser: {
+		marginLeft: 10,
+		color: 'rgb(156, 39, 176)'
+	},
+	cmtContent: {
+
+	},
+	txtCmtWrapper: {
+		marginTop: 5,
+		marginBottom: 5
 	}
 }

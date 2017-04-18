@@ -1,11 +1,10 @@
 import React from 'react';
-import { FlatButton } from 'material-ui';
 // Item of ItemDetail
 import ImageGallery from 'react-image-gallery';
 import style from './style';
 
 export default ({title, images, price, date, description}) => (
-	<div style={style.itemWrapper}>
+	<div>
 		<div>
 			<ImageGallery
 				items={images}

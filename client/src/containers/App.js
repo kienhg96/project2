@@ -4,7 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { history } from '../config';
 import { Switch, Route } from 'react-router-dom';
 
-import { Signup, Login, ItemHorizontal, ItemDetail } from '../components';
+import { Signup, Login, ItemHorizontal, ItemDetail, AddProduct } from '../components';
 
 const App = (props) => (
 	<ConnectedRouter history={history}>
@@ -13,6 +13,7 @@ const App = (props) => (
 			<Route exact path="/login" component={Login}/>
 			<Route exact path="/item" component={ItemHorizontal}/>
 			<Route exact path="/detail" component={ItemDetail}/>
+			<Route exact path="/add" component={AddProduct}/>
 		</Switch>
 	</ConnectedRouter>
 )

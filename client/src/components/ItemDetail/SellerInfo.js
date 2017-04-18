@@ -2,7 +2,7 @@ import React from 'react';
 import style from './style';
 
 export default ({avatar, name, address, phone}) => (
-	<div style={style.sellerWrapper}>
+	<div>
 		<div style={style.infoWrapper}>
 			<div style={style.avatarWrapper}>
 				<img style={style.avatar} src={avatar} alt="Seller Avatar"/>

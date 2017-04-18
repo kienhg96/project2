@@ -5,6 +5,7 @@ import style from './style';
 import Item from './Item';
 import SellerInfo from './SellerInfo';
 import Comments from './Comments';
+import Report from './Report';
 
 const images = [
 	{
@@ -27,7 +28,7 @@ export default class ItemDetail extends Component {
 	render() {
 		return (
 			<Paper style={style.container} zDepth={1}>
-				<div>
+				<div style={style.itemWrapper}>
 					<Item 
 						title="Muốn bán đồ đạc"
 						price="1.200.000 đ"
@@ -37,11 +38,14 @@ export default class ItemDetail extends Component {
 					/>
 					<Comments />
 				</div>
-				<SellerInfo avatar="https://pickaface.net/gallery/avatar/myspacedixson5247bbe83039a.png"
-					name="Hoàng Văn Kiên"
-					address="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-					phone="0123456789"
-				/>
+				<div style={style.sellerWrapper}>
+					<SellerInfo avatar="https://pickaface.net/gallery/avatar/myspacedixson5247bbe83039a.png"
+						name="Hoàng Văn Kiên"
+						address="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+						phone="0123456789"
+					/>
+					<Report/>
+				</div>
 			</Paper>
 		)
 	}
