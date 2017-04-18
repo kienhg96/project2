@@ -14,7 +14,7 @@
 			date: String 'YYYY-MM-DD'
 		}
 	Response: 
-		Success: {}
+		Success: {...}
 */
 
 'use strict';

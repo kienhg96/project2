@@ -1,5 +1,5 @@
 /*
-	GET /api/product/:productId
+	GET /api/product/info/:productId
 	Response: 
 		Success: {
 			error: "OK",
@@ -30,6 +30,7 @@
 							name: String
 						}
 					},
+					avatar: String,
 					date: String, 'YYYY-MM-DD'
 				}
 			}

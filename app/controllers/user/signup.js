@@ -25,6 +25,7 @@
 					name: String
 				}
 			},
+			avatar: String,
 			date: String, 'YYYY-MM-DD'
 		}
 	}

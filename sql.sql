@@ -2,39 +2,39 @@ CREATE SCHEMA `project2` DEFAULT CHARACTER SET utf8 ;
 
 CREATE TABLE `project2`.`user` (
   `userId` INT NOT NULL AUTO_INCREMENT,
-  `phone` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NULL,
+  `phone` VARCHAR(64) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
+  `email` VARCHAR(64) NULL,
   `districtId` INT NOT NULL,
   PRIMARY KEY (`userId`));
 
 CREATE TABLE `project2`.`district` (
   `districtId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
   `cityId` INT NOT NULL,
   PRIMARY KEY (`districtId`));
 
 CREATE TABLE `project2`.`city` (
   `cityId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(64) NULL,
   PRIMARY KEY (`cityId`));
 
 CREATE TABLE `project2`.`category` (
   `categoryId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`categoryId`));
 
 CREATE TABLE `project2`.`report` (
   `reportId` INT NOT NULL AUTO_INCREMENT,
   `productId` INT NOT NULL,
-  `content` VARCHAR(1000) NOT NULL,
+  `content` VARCHAR(512) NOT NULL,
   `date` DATE NOT NULL,
   PRIMARY KEY (`reportId`));
 
 CREATE TABLE `project2`.`product` (
   `productId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
-  `description` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `description` VARCHAR(1024) NOT NULL,
   `price` INT NOT NULL,
   `districtId` INT NOT NULL,
   `date` DATE NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `project2`.`categorylink` (
 
 CREATE TABLE `project2`.`comment` (
   `commentId` INT NOT NULL AUTO_INCREMENT,
-  `content` VARCHAR(500) NOT NULL,
+  `content` VARCHAR(512) NOT NULL,
   `date` DATE NOT NULL,
   PRIMARY KEY (`commentId`));
 
@@ -61,8 +61,8 @@ CREATE TABLE `project2`.`commentlink` (
   PRIMARY KEY (`commentId`, `userId`, `productId`));
 
 CREATE TABLE `project2`.`admin` (
-  `username` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(64) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`username`));
 
 USE project2;
@@ -94,3 +94,32 @@ ALTER TABLE `project2`.product
 -- 
 ALTER TABLE `project2`.user 
   ADD COLUMN `date` date;
+-- 2017-04-11
+-- CREATE TABLE project2.subcategory (
+--   subCategoryId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   categoryId INT NOT NULL, 
+--   name VARCHAR(64),
+--   CONSTRAINT fk_subcategory_categoryId FOREIGN KEY (categoryId) REFERENCES project2.category(categoryId)
+-- );
+
+--
+ALTER TABLE project2.user 
+  ADD COLUMN avatar VARCHAR(32);
+-- 2017-04-12
+ALTER TABLE project2.comment
+  DROP COLUMN date,
+  ADD COLUMN dateTime DATETIME;
+--
+DROP TABLE project2.commentlink;
+ALTER TABLE project2.comment
+  ADD COLUMN userId INT NOT NULL,
+  ADD COLUMN productId INT NOT NULL,
+  ADD CONSTRAINT fk_comment_userId FOREIGN KEY (userId) REFERENCES project2.user(userId),
+  ADD CONSTRAINT fk_comment_productId FOREIGN KEY (productId) REFERENCES project2.product(productId);
+
+
+-- 
+ALTER TABLE project2.product
+  ADD COLUMN districtId INT,
+  ADD CONSTRAINT fk_product_districtId FOREIGN KEY (districtId) REFERENCES project2.district(districtId);
+

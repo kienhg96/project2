@@ -1,5 +1,5 @@
 /*
-	POST /api/product/user
+	POST /api/product/guestUser
 	Request: 
 		Body: {
 			name: String,
@@ -47,9 +47,9 @@
 							name: String
 						}
 					},
-					avatar: String,
 					date: String, 'YYYY-MM-DD'
-				}
+				},
+				productKey: String
 			}
 		}
 		Error:
@@ -61,6 +61,7 @@
 'use strict';
 
 const errTypes = require(global.__base + 'config/error');
+const User = require(global.__base + 'models/user');
 const Product = require(global.__base + 'models/product');
 const District = require(global.__base + 'models/district');
 const Category = require(global.__base + 'models/category');
@@ -80,12 +81,13 @@ module.exports = (req, res) => {
         return res.result(400, errTypes.INVALID_ARGUMENT_TYPE, 'Invalid type of argument ' + keys[keyNaN]);
     }
     let info = {
-    	userId: req.user.userId,
+    	userId: User.ANONYMOUS_USER.userId,
     	name: req.body.name,
     	description: req.body.description,
     	price: parseInt(req.body.price, 10),
     	districtId: parseInt(req.body.districtId, 10)
     };
+    
     // Check district
     District.findById(info.districtId, (err, district) => {
     	if (err) {
@@ -95,7 +97,7 @@ module.exports = (req, res) => {
     		return res.result(404, errTypes.DISTRICT_NOT_FOUND, 'District not found');
     	}
     	let product = new Product(info);
-	    // Save
+    	// Save
 	    product.save((err) => {
 	    	if (err) {
 	    		return res.error(err);
@@ -127,6 +129,7 @@ module.exports = (req, res) => {
 		    			return res.result(200, errTypes.OK, 'OK', productJSON);
 		    		});
 		    	} else {
+		    		// Add images
 		    		let count = 0;
 			    	for (let i = 0, n = images.length; i < n; i++) {
 			    		product.addImage(images[i], (err) => {
@@ -135,11 +138,20 @@ module.exports = (req, res) => {
 			    			}
 			    			count++;
 			    			if (count == n) {
+			    				// To JSON
 			    				product.toJSON((err, productJSON) => {
 					    			if (err) {
 					    				return res.error(err);
 					    			}
-					    			return res.result(200, errTypes.OK, 'OK', productJSON);
+					    			let resData = productJSON;
+					    			// Set product key
+					    			product.setKey((err, key) => {
+					    				if (err) {
+						    				return res.error(err);
+						    			}
+						    			resData.productKey = key; 
+						    			return res.result(200, errTypes.OK, 'OK', resData);
+					    			});
 		    					});
 			    			}
 			    		});
