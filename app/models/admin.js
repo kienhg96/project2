@@ -84,6 +84,216 @@ class Admin {
 			return callback(null);
 		});
 	}
+
+	static deleteUser(userId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) return callback(err);
+			let query = 'DELETE FROM user WHERE userId = ?';
+			conn.query(query, [userId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteProduct(productId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM product WHERE productId = ?';
+			conn.query(query, [productId], function(err, result) {
+				conn.release();
+				if (err){
+					return callback(err);
+				}
+				return callback(null);
+			})
+		});
+	}
+
+	static deleteCity(cityId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM city WHERE cityId = ?';
+			conn.query(query, [cityId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteDistrict(districtId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM district WHERE districtId = ?';
+			conn.query(query, [districtId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+
+				return callback(null);
+			});
+		});
+	}
+
+	static deleteCategory(categoryId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'SELECT * FROM categorylink WHERE categoryId = ?';
+			conn.query(query, [categoryId], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+				if (rows[0]) {
+					return callback('Exist');
+				}
+
+				query = 'DELETE FROM category WHERE categoryId = ?';
+				conn.query(query, [categoryId], function(err, result) {
+					conn.release();
+					if (err) {
+						return callback(err);
+					}
+
+					return callback(null);
+				});
+			});
+		});
+	}
+
+	static deleteComment(commentId, callback) {
+		pool.getConnection(function(err, conn){
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'DELETE FROM comment WHERE commentId = ?';
+			conn.query(query, [commentId], function(err, result) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+
+				return callback(null);
+			});
+		});
+	}
+
+	static addCategory(categoryName, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'SELECT * FROM category WHERE name LIKE ?';
+			conn.query(query, [categoryName], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+
+				if (rows[0]) {
+					return callback('Exist');
+				}
+
+				query = 'INSERT INTO category(name) VALUES(?)';
+				conn.query(query, [categoryName], function(err, result) {
+					conn.release();
+					if (err) {
+						return callback(err);
+					}
+
+					return callback(null);
+				});
+			});
+		});
+	}
+
+	static addCity(cityName, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'SELECT * FROM city WHERE name LIKE ?';
+			conn.query(query, [cityName], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+
+				if (rows[0]) {
+					return callback('Exist');
+				}
+
+				query = 'INSERT INTO city(name) VALUES(?)';
+				conn.query(query, [cityName], function(err, result) {
+					conn.release();
+					if (err) {
+						return callback(err);
+					}
+
+					return callback(null);
+				});
+			});
+		});
+	}
+
+	static addDistrict(districtName, cityId, callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+
+			let query = 'SELECT * FROM district WHERE name LIKE ? AND cityId = ?';
+			conn.query(query, [districtName, cityId], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+
+				if (rows[0]) {
+					return callback('Exist');
+				}
+
+				query = 'SELECT * FROM city WHERE cityId = ?';
+				conn.query(query, [cityId], function(err, rows) {
+					if (err) {
+						return callback(err);
+					}
+					if (!rows[0]) {
+						return callback('not exist');
+					}
+
+					query = 'INSERT INTO district(name, cityId) VALUES(?, ?)';
+					conn.query(query, [districtName, cityId], function(err, result) {
+						conn.release();
+						if (err) {
+							return callback(err);
+						}
+
+						return callback(null);
+					});
+				});
+			});
+		});
+	}
 }
 
 module.exports = Admin;

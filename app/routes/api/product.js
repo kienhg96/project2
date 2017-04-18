@@ -25,5 +25,8 @@ router.route('/user/comment')
 	.put(deserializeUser, product.user.updateComment)
 	.delete(deserializeUser, product.user.deleteComment);
 router.post('/report', product.reportProduct);
+router.route('/')
+	.get(product.getProducts);
+router.post('/user/comment/add', deserializeUser, product.user.addComment);
 
 module.exports = router;

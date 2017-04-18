@@ -27,6 +27,7 @@
     "moment": "^2.18.1",
     "mysql": "^2.13.0",
     "optimist": "^0.6.1",
+    "rand-token": "^0.3.0",
     "request": "^2.81.0",
     "sendgrid-nodejs": "0.1.0-2"
   }
