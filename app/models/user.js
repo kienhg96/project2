@@ -91,6 +91,7 @@ class User {
 			let query = 'INSERT INTO user SET ?';
 			let user = Object.assign({}, this.rawData(), { password: this._password });
 			conn.query(query, [user], (err, result) => {
+				conn.release();
 				if (err) { return callback(err); }
 
 				this._userId = result.insertId;
