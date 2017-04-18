@@ -7,6 +7,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import App from './containers/App';
+import { getCities } from './actions/cities';
+
+store.dispatch(getCities());
 
 injectTapEventPlugin();
 

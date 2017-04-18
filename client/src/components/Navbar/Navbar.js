@@ -67,6 +67,13 @@ export default class Navbar extends Component {
 								value={this.state.search}
 								onChange={this.handleSearchChange}
 								name="search"
+								hintText="Tìm kiếm"
+								hintStyle={{color: '#ecf0f1', marginLeft: 12}}
+								onFocus={e => {
+									if (e.target.value) {
+										e.target.select();
+									}
+								}}
 							/>
 						</form>
 					</ToolbarGroup>

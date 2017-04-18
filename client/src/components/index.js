@@ -4,6 +4,7 @@ import ItemHorizontal from './ItemHorizontal';
 import ItemDetail from './ItemDetail';
 import AddProduct from './AddProduct';
 import Navbar from './Navbar';
+import Snack from './Snack';
 
 export { Login, Signup, ItemHorizontal, ItemDetail, AddProduct,
-		Navbar };
+		Navbar, Snack };

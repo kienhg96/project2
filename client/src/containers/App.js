@@ -4,8 +4,10 @@ import { ConnectedRouter } from 'react-router-redux';
 import { history } from '../config';
 import { Switch, Route } from 'react-router-dom';
 
-import { Signup, Login, ItemHorizontal, ItemDetail, 
-		AddProduct, Navbar } from '../components';
+import { ItemHorizontal, ItemDetail, 
+		AddProduct, Navbar, Snack } from '../components';
+import Signup from './Signup';
+import Login from './Login';
 
 const style = {
 	navbar: {
@@ -19,7 +21,7 @@ const style = {
 	}
 }
 
-const App = (props) => (
+const App = ({snack, closeSnackMessage}) => (
 	<ConnectedRouter history={history}>
 		<div>
 			<div style={style.navbar}>
@@ -35,10 +37,17 @@ const App = (props) => (
 					<Route exact path="/add" component={AddProduct}/>
 				</Switch>
 			</div>
+			<Snack open={snack.open} message={snack.message}
+				onRequestClose={closeSnackMessage}
+			/>
 		</div>
 	</ConnectedRouter>
 )
 
-export default connect(state => ({
+import { closeSnackMessage } from '../actions/snack';
 
-}), {})(App);
+export default connect(state => ({
+	snack: state.snack
+}), {
+	closeSnackMessage
+})(App);

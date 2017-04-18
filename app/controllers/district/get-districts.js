@@ -3,8 +3,13 @@
 const District = require(global.__base + 'models/district');
 const errTypes = require(global.__base + 'config/error');
 
-const getDistricts = function(req, res){
-	District.findAll(function(err, districts){
+const getDistricts = function(req, res) {
+	const query = req.query;
+	const cityId = query.cityId;
+	if (!cityId) {
+		return res.result(200, errTypes.MISSING_ARGUMENT, "Missing cityId");
+	}
+	District.findAll({cityId}, function(err, districts){
 		if (err) return res.error(err);
 
 		let resData = [];

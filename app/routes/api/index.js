@@ -16,7 +16,7 @@ router.use(session);
 // API
 router.use('/user', userRouter);
 router.use('/city', cityRouter);
-router.use('/district', districtRouter);
+// router.use('/district', districtRouter); // Not use
 router.use('/admin', adminRouter);
 router.use('/product', productRouter);
 
