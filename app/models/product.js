@@ -599,7 +599,7 @@ class Product {
 			sort = ' ASC ';
 		}
 
-		let query = 'SELECT * FROM ' + tableList.join(', ') + 
+		let query = 'SELECT *, product.date AS pDate FROM ' + tableList.join(', ') + 
 				' WHERE ' + joinConditions.join(' AND' );
 		if (queryList.length === 0) {
 			query += ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?'; 
@@ -620,6 +620,7 @@ class Product {
 			let count = 0;
 			let n = rows.length;
 			rows.forEach((row, i) => {
+				row.date = row.pDate;
 				let product = new Product(row);
 				// Categories
 				Category.findByProductId(product.productId, (err, categories) => {
