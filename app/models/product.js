@@ -40,7 +40,7 @@ class Product {
 	get images() { 
 		let result = [];
 		this._images.forEach((imgName) => {
-			result.push(path.join(IMAGE_BASE_PATH, imgName));
+			result.push(path.join(IMAGE_BASE_PATH, imgName).replace(/\\/g, '/'));
 		});
 		return result;
 	}
