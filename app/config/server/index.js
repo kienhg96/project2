@@ -2,7 +2,7 @@
 
 const express  = require('express');
 const bodyParser = require('body-parser');
-
+const path = require('path');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -35,7 +35,7 @@ const log = require(global.__base + 'controllers/middleware/log');
 app.use(log);
 const apiRouter = require(global.__base + 'routes/api');
 app.use('/api', apiRouter);
-
+app.use('/image', express.static(path.join(global.__base, 'images/')));
 app.get('/result', (req, res) => {
 	res.result(200, errTypes.OK, "OK", {x: 1});
 });	
