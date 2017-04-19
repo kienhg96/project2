@@ -6,6 +6,8 @@ import AddProduct from './AddProduct';
 import Navbar from './Navbar';
 import Snack from './Snack';
 import Loading from './Loading';
+import AddActionButton from './AddActionButton';
+import Dash from './Dash';
 
 export { Login, Signup, ItemHorizontal, ItemDetail, AddProduct,
-		Navbar, Snack, Loading };
+		Navbar, Snack, Loading, AddActionButton, Dash };

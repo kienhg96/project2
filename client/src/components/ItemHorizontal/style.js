@@ -10,7 +10,7 @@ export default {
 		borderRadius: 5
 	},
 	imageWrapper: {
-		flexBasis: 200,
+		flexBasis: 250,
 		flexGrow: 0,
 		flexShrink: 0,
 		marginRight: 20,
@@ -20,7 +20,9 @@ export default {
 	image: {
 		borderRadius: 5,
 		maxHeight: 200,
-		maxWidth: 250
+		maxWidth: 250,
+		display: 'block',
+		margin: '0 auto'
 	},
 	contentWrapper: {
 		flex: 1,

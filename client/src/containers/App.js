@@ -4,10 +4,12 @@ import { ConnectedRouter } from 'react-router-redux';
 import { history } from '../config';
 import { Switch, Route } from 'react-router-dom';
 
-import { ItemHorizontal, ItemDetail, 
-		AddProduct, Navbar, Snack, Loading } from '../components';
+import { AddActionButton, Snack, Loading, 
+		AddProduct, Navbar } from '../components';
 import Signup from './Signup';
 import Login from './Login';
+import Dash from './Dash';
+import ItemDetail from './ItemDetail';
 
 const style = {
 	navbar: {
@@ -29,11 +31,10 @@ const App = (props) => (
 			</div>
 			<div style={style.content}>
 				<Switch>
-					<Route exact path="/" component={ItemDetail}/>
+					<Route exact path="/" component={Dash}/>
 					<Route exact path="/signup" component={Signup}/>
 					<Route exact path="/login" component={Login}/>
-					<Route exact path="/item" component={ItemHorizontal}/>
-					<Route exact path="/detail" component={ItemDetail}/>
+					<Route exact path="/detail/:id" component={ItemDetail}/>
 					<Route exact path="/add" render={() => 
 						<AddProduct 
 							cities={props.cities}
@@ -47,6 +48,7 @@ const App = (props) => (
 			<Snack open={props.snack.open} message={props.snack.message}
 				onRequestClose={props.closeSnackMessage}
 			/>
+			<AddActionButton />
 		</div>
 	</ConnectedRouter>
 )

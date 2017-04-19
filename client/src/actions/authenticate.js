@@ -14,7 +14,12 @@ export const signup = info => (dispatch, getState) => {
 			dispatch(push('/login'));
 		},
 		error: xhr => {
-			const response = JSON.parse(xhr.responseText);
+			let response;
+			try {
+				response = JSON.parse(xhr.responseText);
+			} catch (e) {
+				return dispatch(showSnackMessage('Đã xảy ra lỗi, vui lòng thử lại sau'));
+			}
 			if (response.error === "USER_EXISTS") {
 				dispatch(showSnackMessage('Email hoặc SĐT đã tồn tại'));
 			} else {
@@ -47,13 +52,18 @@ export const login = info => (dispatch, getState) => {
 			}
 		},
 		error: xhr => {
-			const response = JSON.parse(xhr.responseText);
-			console.log(response);
+			let response;
+			try {
+				response = JSON.parse(xhr.responseText);
+			} catch (e) {
+				return dispatch(showSnackMessage('Đã xảy ra lỗi, vui lòng thử lại sau'));
+			}
 			if (response.error === "WRONG_PASSWORD") {
 				dispatch(showSnackMessage('Mật khẩu không đúng'));
 			} else if (response.error === "USER_NOT_FOUND") {
 				dispatch(showSnackMessage('Tài khoản không tồn tại'));
 			}  else {
+				console.log(response);
 				dispatch(showSnackMessage('Đã xảy ra lỗi, vui lòng thử lại sau'));
 			}
 		}

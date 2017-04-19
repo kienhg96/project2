@@ -83,7 +83,7 @@ export default class Navbar extends Component {
 						<IconButton style={style.icon}>
 							<i className="material-icons">menu</i>
 						</IconButton>
-						<ToolbarTitle text="My App" style={style.title}/>
+						<Link to="/"><ToolbarTitle text="My App" style={style.title}/></Link>
 						<form style={style.searchWrapper} onSubmit={this.handleSearchSubmit}>
 							<i style={{color:'#fff'}} className="material-icons">search</i>
 							<TextField
