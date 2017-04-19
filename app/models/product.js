@@ -549,7 +549,7 @@ class Product {
 			valueList.push(queryObj.userId);
 		}
 		if (queryObj.districtId) {
-			queryList.push(' districtId = ? ');
+			queryList.push(' product.districtId = ? ');
 			valueList.push(queryObj.districtId);
 		}
 		if (queryObj.categoryId) {
