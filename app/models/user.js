@@ -42,9 +42,9 @@ class User {
 	get rating() { return this._rating; }
 	get avatar() { 
 		if (this._avatar) {
-			return path.join(IMAGE_BASE_PATH, this._avatar);
+			return path.join(IMAGE_BASE_PATH, this._avatar).replace(/\\/g, '/');
 		} else {
-			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG);
+			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG).replace(/\\/g, '/');
 		}
 	}
 
