@@ -19,6 +19,8 @@ router.route('/guestuser')
 	.post(product.guestUser.addProduct)
 	.put(product.guestUser.updateProduct)
 	.delete(product.guestUser.deleteProduct);
+router.post('/guestuser/comment/add', product.guestUser.addComment);
+
 router.route('/user/comment')
 	.post(deserializeUser, product.user.addComment)
 	.put(deserializeUser, product.user.updateComment)
