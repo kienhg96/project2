@@ -574,6 +574,10 @@ class Product {
 			queryList.push(' product.date >= ? ');
 			valueList.push(queryObj.date);
 		}
+		if (queryObj.isSold === '1' || queryObj.isSold === '0') {
+			queryList.push(' product.isSold = ? ');
+			valueList.push(parseInt(queryObj.isSold, 10));
+		}
 		let orderBy = ' productId ';
 		let sort = ' DESC ';
 		switch (queryObj.orderBy) {
