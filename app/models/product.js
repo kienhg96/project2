@@ -552,9 +552,15 @@ class Product {
 			queryList.push(' product.districtId = ? ');
 			valueList.push(queryObj.districtId);
 		}
+		if (queryObj.cityId) {
+			queryList.push(' district.cityId = ?');
+			valueList.push(queryObj.cityId);
+			tableList.push('city');
+			joinConditions.push(' product.districtId = district.districtId ');
+		}
 		if (queryObj.categoryId) {
-			tableList = ['product', 'user', 'categorylink'];
-			joinConditions = [' product.userId = user.userId ', ' categorylink.productId = product.productId '];
+			tableList.push('categorylink');
+			joinConditions.push(' categorylink.productId = product.productId ');
 			queryList.push(' categorylink.categoryId = ? ');
 			valueList.push(queryObj.categoryId);
 		}
@@ -588,7 +594,10 @@ class Product {
 				orderBy = ' price ';
 				break;
 			case 'date':
-				orderBy = ' product.roductId ';
+				orderBy = ' product.productId ';
+				break;
+			case 'cityId':
+				orderBy = ' district.cityId ';
 				break;
 			case 'categoryId':
 				orderBy = ' categorylink.categoryId ';
