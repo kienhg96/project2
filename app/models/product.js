@@ -40,7 +40,7 @@ class Product {
 	get images() { 
 		let result = [];
 		this._images.forEach((imgName) => {
-			result.push(path.join(IMAGE_BASE_PATH, imgName));
+			result.push(path.join(IMAGE_BASE_PATH, imgName).replace(/\\/g, '/'));
 		});
 		return result;
 	}
@@ -549,7 +549,7 @@ class Product {
 			valueList.push(queryObj.userId);
 		}
 		if (queryObj.districtId) {
-			queryList.push(' districtId = ? ');
+			queryList.push(' product.districtId = ? ');
 			valueList.push(queryObj.districtId);
 		}
 		if (queryObj.cityId) {
@@ -580,6 +580,10 @@ class Product {
 			queryList.push(' product.date >= ? ');
 			valueList.push(queryObj.date);
 		}
+		if (queryObj.isSold === '1' || queryObj.isSold === '0') {
+			queryList.push(' product.isSold = ? ');
+			valueList.push(parseInt(queryObj.isSold, 10));
+		}
 		let orderBy = ' productId ';
 		let sort = ' DESC ';
 		switch (queryObj.orderBy) {
@@ -608,7 +612,7 @@ class Product {
 			sort = ' ASC ';
 		}
 
-		let query = 'SELECT * FROM ' + tableList.join(', ') + 
+		let query = 'SELECT *, product.date AS pDate, product.districtId as pDistrictId FROM ' + tableList.join(', ') + 
 				' WHERE ' + joinConditions.join(' AND' );
 		if (queryList.length === 0) {
 			query += ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?'; 
@@ -629,6 +633,8 @@ class Product {
 			let count = 0;
 			let n = rows.length;
 			rows.forEach((row, i) => {
+				row.date = row.pDate;
+				row.districtId = row.pDistrictId;
 				let product = new Product(row);
 				// Categories
 				Category.findByProductId(product.productId, (err, categories) => {

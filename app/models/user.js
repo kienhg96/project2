@@ -42,9 +42,9 @@ class User {
 	get rating() { return this._rating; }
 	get avatar() { 
 		if (this._avatar) {
-			return path.join(IMAGE_BASE_PATH, this._avatar);
+			return path.join(IMAGE_BASE_PATH, this._avatar).replace(/\\/g, '/');
 		} else {
-			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG);
+			return path.join(IMAGE_BASE_PATH, DEFAULT_IMG).replace(/\\/g, '/');
 		}
 	}
 
@@ -91,6 +91,7 @@ class User {
 			let query = 'INSERT INTO user SET ?';
 			let user = Object.assign({}, this.rawData(), { password: this._password });
 			conn.query(query, [user], (err, result) => {
+				conn.release();
 				if (err) { return callback(err); }
 
 				this._userId = result.insertId;

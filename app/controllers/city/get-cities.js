@@ -18,6 +18,7 @@
 */
 
 const City = require(global.__base + 'models/city');
+const District = require(global.__base + 'models/district');
 const errTypes = require(global.__base + 'config/error');
 
 const getCities = (req, res) => {
@@ -25,8 +26,24 @@ const getCities = (req, res) => {
 		if (err) {
 			return res.error(err);
 		}
-		let resData = cities;
-		return res.result(200, errTypes.OK, 'OK', resData);
+		const resData = [];
+		cities.forEach(city => {
+			District.findAll({
+				cityId: city.cityId
+			}, (err, districts) => {
+				if (err) {
+					return res.error(err);
+				}
+				resData.push({
+					cityId: city.cityId,
+					name: city.name,
+					districts
+				});
+				if (resData.length === cities.length) {
+					return res.result(200, errTypes.OK, 'OK', resData);
+				}
+			});
+		});
 	});
 };
 

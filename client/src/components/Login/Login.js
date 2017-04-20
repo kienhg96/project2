@@ -32,7 +32,7 @@ export default class Login extends Component {
 	handleFormSubmit(e) {
 		e.preventDefault();
 		// Login Here
-		console.log(this.state);
+		this.props.login(this.state);
 	}
 
 	handleUsernameChange(e, username) {

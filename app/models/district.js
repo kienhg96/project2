@@ -81,18 +81,37 @@ class District {
 		});
 	}
 
-	static findAll(callback) {
-		let query = 'SELECT * FROM district';
-		pool.query(query, [], (err, rows) => {
-			if (err) {
-				return callback(err);
-			}
-			let districts = [];
-			rows.forEach((row, i) => {
-				districts.push(new District(row));
+	static findAll(query, callback) {
+		if (typeof query === 'function') {
+			callback = query;
+			let qry = 'SELECT * FROM district';
+			pool.query(qry, [], (err, rows) => {
+				if (err) {
+					return callback(err);
+				}
+				let districts = [];
+				rows.forEach((row, i) => {
+					districts.push(new District(row));
+				});
+				return callback(null, districts);
 			});
-			return callback(null, districts);
-		});
+		}
+		else {
+			let qry = 'SELECT * FROM district WHERE cityId = ?';
+			pool.query(qry, [query.cityId], (err, rows) => {
+				if (err) {
+					return callback(err);
+				}
+				let districts = [];
+				rows.forEach((row, i) => {
+					districts.push({
+						districtId: row.districtId,
+						name: row.name
+					});
+				});
+				return callback(null, districts);
+			});
+		}
 	}
 }
 

@@ -67,7 +67,7 @@ class City {
 				return callback(err);
 			}
 			let query = 'SELECT * FROM city';
-			pool.query(query, [], (err, rows) => {
+			conn.query(query, [], (err, rows) => {
 				conn.release();
 				if (err) {
 					return callback(err);
