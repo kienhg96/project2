@@ -8,6 +8,9 @@ import Snack from './Snack';
 import Loading from './Loading';
 import AddActionButton from './AddActionButton';
 import Dash from './Dash';
+import LeftDrawer from './LeftDrawer';
+import MyProducts from './MyProducts';
 
 export { Login, Signup, ItemHorizontal, ItemDetail, AddProduct,
-		Navbar, Snack, Loading, AddActionButton, Dash };
+		Navbar, Snack, Loading, AddActionButton, Dash, LeftDrawer,
+		MyProducts };

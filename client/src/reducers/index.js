@@ -3,7 +3,10 @@ import cities from './cities';
 import snack from './snack';
 import user from './user';
 import categories from './categories';
-import items from './items';
+import products from './products';
+import page from './page';
+import leftDrawer from './leftDrawer';
+import filter from './filter';
 
 export default (state = {}, action) => {
 	return {
@@ -12,6 +15,9 @@ export default (state = {}, action) => {
 		cities: cities(state.cities, action),
 		user: user(state.user, action),
 		categories: categories(state.categories, action),
-		items: items(state.items, action)
+		products: products(state.products, action),
+		page: page(state.page, action),
+		leftDrawer: leftDrawer(state.leftDrawer, action),
+		filter: filter(state.filter, action)
 	};
 };

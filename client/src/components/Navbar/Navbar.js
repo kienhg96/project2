@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { AppBar, IconButton, TextField, IconMenu, MenuItem } from 'material-ui';
+import { AppBar, IconButton, TextField, IconMenu, MenuItem,
+		Divider } from 'material-ui';
 import { ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Link } from 'react-router-dom';
 
@@ -24,6 +25,9 @@ const style = {
 	    flex: 1,
 	    display: 'flex',
     	alignItems: 'center'
+	},
+	menuItem: {
+		paddingLeft: 55
 	}
 }
 
@@ -36,6 +40,8 @@ export default class Navbar extends Component {
 		this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
 		this.handleSearchChange = this.handleSearchChange.bind(this);
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
+		this.handleProducts = this.handleProducts.bind(this);
+		this.handleLeftIconClick = this.handleLeftIconClick.bind(this);
 	}
 
 	handleSearchChange(e, search) {
@@ -51,6 +57,14 @@ export default class Navbar extends Component {
 		this.props.logout();
 	}
 
+	handleProducts() {
+
+	}
+
+	handleLeftIconClick() {
+		this.props.onLeftIconClick();
+	}
+
 	render() {
 		const MenuLogged = () => (
 			<IconMenu iconButtonElement={
@@ -58,7 +72,15 @@ export default class Navbar extends Component {
 					<i className="material-icons">more_vert</i>
 				</IconButton>
 			}>
-				<MenuItem primaryText="Đăng xuất" onTouchTap={this.handleLogoutClick}/>
+				<Link to="/myproducts"><MenuItem primaryText="Các tin đã đăng" onTouchTap={this.handleProducts}
+					leftIcon={<i className="material-icons">monetization_on</i>}
+					innerDivStyle={style.menuItem}
+				/></Link>
+				<Divider />
+				<MenuItem primaryText="Đăng xuất" onTouchTap={this.handleLogoutClick}
+					leftIcon={<i className="material-icons">exit_to_app</i>}
+					innerDivStyle={style.menuItem}
+				/>
 			</IconMenu>
 		);
 		const MenuNotLogged = () => (
@@ -67,8 +89,14 @@ export default class Navbar extends Component {
 					<i className="material-icons">more_vert</i>
 				</IconButton>
 			}>
-				<Link to="/login"><MenuItem primaryText="Đăng nhập"/></Link>
-				<Link to="/signup"><MenuItem primaryText="Đăng ký"/></Link>
+				<Link to="/login"><MenuItem primaryText="Đăng nhập"
+					leftIcon={<i className="material-icons">input</i>}
+					innerDivStyle={style.menuItem}
+				/></Link>
+				<Link to="/signup"><MenuItem primaryText="Đăng ký"
+					leftIcon={<i className="material-icons">person_add</i>}
+					innerDivStyle={style.menuItem}
+				/></Link>
 			</IconMenu>
 		);
 
@@ -80,7 +108,7 @@ export default class Navbar extends Component {
 				titleStyle={{ display: 'none' }}
 				iconElementLeft={
 					<ToolbarGroup style={style.toolbar}>
-						<IconButton style={style.icon}>
+						<IconButton style={style.icon} onTouchTap={this.handleLeftIconClick}>
 							<i className="material-icons">menu</i>
 						</IconButton>
 						<Link to="/"><ToolbarTitle text="My App" style={style.title}/></Link>

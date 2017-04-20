@@ -1,9 +1,10 @@
 import { Dash } from '../components';
 import { connect } from 'react-redux';
-import { getItems } from '../actions/items';
+import { getProducts } from '../actions/products';
 
 export default connect(state => ({
-	items: state.items
+	products: state.products,
+	page: state.page
 }), {
-	getItems
+	getProducts
 })(Dash);

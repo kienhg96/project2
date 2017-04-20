@@ -118,7 +118,7 @@ export default class AddItem extends Component {
 			imageToBase64(files[i], (src) => {
 				images.push({
 					src,
-					modified: files[i].lastModified
+					key: files[i].lastModified + files[i].name
 				});
 				if (images.length === length) {
 					this.setState({images});
@@ -240,7 +240,7 @@ export default class AddItem extends Component {
 						<GridList style={style.gridList} cols={2.2} cellHeight={200}>
 							{this.state.images.map(image => (
 								<GridTile
-									key={image.modified}
+									key={image.key}
 								>
 									<img src={image.src} alt="Ảnh mô tả sản phẩm"/>
 								</GridTile>

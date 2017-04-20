@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
-import { TextField } from 'material-ui';
+import { TextField, LinearProgress  } from 'material-ui';
 import style from './style';
-
-const commentList = [{
-	commentId: 1,
-	date: '2017/04/17',
-	content: 'Cái này hay',
-	username: 'anonymous'
-},{
-	commentId: 2,
-	date: '2017/04/18',
-	content: 'Cái này tốt',
-	username: 'Hoàng Kiên'
-},{
-	commentId: 3,
-	date: '2017/05/18',
-	content: 'Cái này bán chưa',
-	username: 'Kiên Hoang'
-}];
 
 const CommentList = ({list}) => (
 	<div>
@@ -54,7 +37,12 @@ export default class Comments extends Component {
 
 	handleCmtSubmit(e) {
 		e.preventDefault();
-		console.log('Submit', this.state.comment);
+		if (this.state.comment) {
+			this.props.onSubmit(this.state.comment);
+			this.setState({
+				comment: ''
+			});
+		}
 	}
 	
 	render() {
@@ -68,8 +56,17 @@ export default class Comments extends Component {
 						onChange={this.handleCmtChange}
 					/>
 				</form>
-				<CommentList list={commentList}/>
+				{this.props.loading && <LinearProgress mode="indeterminate" 
+				style={{
+					backgroundColor: '#ecf0f1'
+				}}/>}
+				<CommentList list={this.props.comments.map(cmt => ({
+					commentId: cmt.commentId,
+					date: cmt.dateTime,
+					username: cmt.user.fullName,
+					content: cmt.content
+				}))}/>
 			</div>
-		)
+		);
 	}
 }
