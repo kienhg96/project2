@@ -1,8 +1,10 @@
 import React from 'react';
 import { RaisedButton } from 'material-ui';
 import style from './style';
+import { Link } from 'react-router-dom';
+
 // Content
-export default ({title, price, date, description, address, detailOnClick}) => (
+export default ({title, price, date, description, address, url, action}) => (
 	<div style={style.contentWrapper}>
 		<div style={style.headWrapper}>
 			<div style={style.title}>{title}</div>
@@ -11,8 +13,12 @@ export default ({title, price, date, description, address, detailOnClick}) => (
 		<div style={style.description}>{description}</div>
 		<div style={style.actionWrapper}>
 			<div style={style.date}>{date + " | " + address}</div>
-			<RaisedButton label="Xem thêm" primary={true} 
-				onTouchTap={detailOnClick}/>
+			<div>
+				{action}
+				<Link to={url}>
+					<RaisedButton label="Xem thêm" primary={true}/>
+				</Link>
+			</div>
 		</div>
 	</div>
 )

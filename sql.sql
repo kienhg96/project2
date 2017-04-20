@@ -123,3 +123,6 @@ ALTER TABLE project2.product
   ADD COLUMN districtId INT,
   ADD CONSTRAINT fk_product_districtId FOREIGN KEY (districtId) REFERENCES project2.district(districtId);
 
+-- 19/04/2017
+-- Create ANONYMOUS_USER
+INSERT INTO user SET userId = 1, phone = 'NONE', districtId = 1, fullName = 'ANONYMOUS_USER';

@@ -25,7 +25,7 @@ export default class Report extends Component {
 	}
 
 	handleSubmit() {
-		console.log('Submit', this.state.message);
+		this.props.onSubmit(this.state.message);
 		this.setState({message: '', open: false});
 	}
 

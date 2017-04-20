@@ -8,7 +8,6 @@ const deserializeUser = require(global.__base + 'controllers/middleware/deserial
 const isAuthenticated = require(global.__base + 'controllers/middleware/is-authenticated');
 const product = require(global.__base + 'controllers/product');
 
-router.get('/', product.getProducts);
 router.get('/info/:productId', product.getProduct);
 router.get('/category', product.getCategories);
 router.get('/comment', product.getComments);
@@ -20,6 +19,8 @@ router.route('/guestuser')
 	.post(product.guestUser.addProduct)
 	.put(product.guestUser.updateProduct)
 	.delete(product.guestUser.deleteProduct);
+router.post('/guestuser/comment/add', product.guestUser.addComment);
+
 router.route('/user/comment')
 	.post(deserializeUser, product.user.addComment)
 	.put(deserializeUser, product.user.updateComment)

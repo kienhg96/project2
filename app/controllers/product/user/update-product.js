@@ -70,6 +70,7 @@ const Category = require(global.__base + 'models/category');
 const utils = require(global.__base + 'utils');
 
 module.exports = (req, res) => {
+    const user = req.user;
 	Product.findById(req.body.productId, (err, product) => {
 		if (err) {
     		return res.error(err);
@@ -77,8 +78,12 @@ module.exports = (req, res) => {
     	if (!product) {
     		return res.result(404, errTypes.PRODUCT_NOT_FOUND, 'Product not found');
     	}
+        if (product.userId !== user.userId) {
+            return res.result(403, errTypes.IS_NOT_AUTHENTICATED, 
+                    'This product is not belong to you');
+        }
     	let info = {};
-    	let keys = ['name', 'description', 'price', 'districtId'];
+    	let keys = ['name', 'description', 'price', 'districtId', 'isSold'];
     	for (let i in keys) {
     		if (req.body[keys[i]]) {
 	    		info[keys[i]] = req.body[keys[i]];

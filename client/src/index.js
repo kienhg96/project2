@@ -7,10 +7,15 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import App from './containers/App';
-
-injectTapEventPlugin();
-
+import { getCities } from './actions/cities';
+import { getCategories } from './actions/categories';
+import { loadUser } from './actions/authenticate';
+import { Loading } from './components';
 import { purple500, purple700, purple400 } from 'material-ui/styles/colors';
+
+store.dispatch(getCities());
+store.dispatch(getCategories());
+injectTapEventPlugin();
 
 const customeTheme = {
 	spacing: lightBaseTheme.space,
@@ -25,10 +30,19 @@ const customeTheme = {
 }
 
 ReactDOM.render(
-  	<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
-	  	<Provider store={store}>
-	  		<App />
-		</Provider>
+	<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
+		<Loading />
 	</MuiThemeProvider>,
-  	document.getElementById('root')
-);
+	document.getElementById('root')
+)
+
+store.dispatch(loadUser(() => {
+	ReactDOM.render(
+	  	<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
+		  	<Provider store={store}>
+		  		<App />
+			</Provider>
+		</MuiThemeProvider>,
+	  	document.getElementById('root')
+	);
+}));

@@ -41,7 +41,10 @@ export default {
 		borderBottom: '1px solid #bdc3c7'
 	},
 	avatarWrapper: {
-		marginRight: 10
+		marginRight: 10,
+		flexBasis: 80,
+		flexGrow: 0,
+		flexShrink: 0
 	},
 	avatar: {
 		maxWidth: '100%',
