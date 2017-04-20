@@ -559,8 +559,8 @@ class Product {
 			joinConditions.push(' product.districtId = district.districtId ');
 		}
 		if (queryObj.categoryId) {
-			tableList = ['product', 'user', 'categorylink'];
-			joinConditions = [' product.userId = user.userId ', ' categorylink.productId = product.productId '];
+			tableList.push('categorylink');
+			joinConditions.push(' categorylink.productId = product.productId ');
 			queryList.push(' categorylink.categoryId = ? ');
 			valueList.push(queryObj.categoryId);
 		}
