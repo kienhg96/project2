@@ -40,7 +40,6 @@ export default class Navbar extends Component {
 		this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
 		this.handleSearchChange = this.handleSearchChange.bind(this);
 		this.handleLogoutClick = this.handleLogoutClick.bind(this);
-		this.handleProducts = this.handleProducts.bind(this);
 		this.handleLeftIconClick = this.handleLeftIconClick.bind(this);
 	}
 
@@ -59,10 +58,6 @@ export default class Navbar extends Component {
 		this.props.logout();
 	}
 
-	handleProducts() {
-
-	}
-
 	handleLeftIconClick() {
 		this.props.onLeftIconClick();
 	}
@@ -75,12 +70,10 @@ export default class Navbar extends Component {
 				</IconButton>
 			}>
 				<Link to="/myproducts"><MenuItem primaryText="Các tin đã đăng" 
-					onTouchTap={this.handleProducts}
 					leftIcon={<i className="material-icons">monetization_on</i>}
 					innerDivStyle={style.menuItem}
 				/></Link>
 				<Link to="/info"><MenuItem primaryText="Thông tin người dùng" 
-					onTouchTap={this.handleProducts}
 					leftIcon={<i className="material-icons">info</i>}
 					innerDivStyle={style.menuItem}
 				/></Link>
@@ -103,6 +96,11 @@ export default class Navbar extends Component {
 				/></Link>
 				<Link to="/signup"><MenuItem primaryText="Đăng ký"
 					leftIcon={<i className="material-icons">person_add</i>}
+					innerDivStyle={style.menuItem}
+				/></Link>
+				<Divider />
+				<Link to="/product"><MenuItem primaryText="Tin đã đăng" 
+					leftIcon={<i className="material-icons">monetization_on</i>}
 					innerDivStyle={style.menuItem}
 				/></Link>
 			</IconMenu>

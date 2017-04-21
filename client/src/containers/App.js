@@ -7,7 +7,7 @@ import { Switch, Route } from 'react-router-dom';
 import { AddActionButton, Snack, 
 		AddProduct, Navbar, LeftDrawer,
 		MyProducts, Search, UserInfo,
-		ShowProductKey } from '../components';
+		ShowProductKey, ProductWithKey } from '../components';
 import Signup from './Signup';
 import Login from './Login';
 import Dash from './Dash';
@@ -67,6 +67,7 @@ const App = (props) => (
 					<Route exact path="/productKey/:productKey" render={({match}) => 
 						<ShowProductKey productKey={match.params.productKey}/>
 					}/>
+					<Route exact path="/product" component={ProductWithKey}/>
 				</Switch>
 			</div>
 			<Snack open={props.snack.open} message={props.snack.message}

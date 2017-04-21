@@ -97,7 +97,7 @@ module.exports = (req, res) => {
                 return res.result(404, errTypes.PRODUCT_NOT_FOUND, 'Product not found');
             }
             let info = {};
-            let keys = ['name', 'description', 'price', 'districtId'];
+            let keys = ['name', 'description', 'price', 'districtId', 'isSold'];
             for (let i in keys) {
                 if (req.body[keys[i]]) {
                     info[keys[i]] = req.body[keys[i]];

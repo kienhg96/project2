@@ -13,7 +13,8 @@ import MyProducts from './MyProducts';
 import Search from './Search';
 import UserInfo from './UserInfo';
 import ShowProductKey from './ShowProductKey';
+import ProductWithKey from './ProductWithKey';
 
 export { Login, Signup, ItemHorizontal, ItemDetail, AddProduct,
 		Navbar, Snack, Loading, AddActionButton, Dash, LeftDrawer,
-		MyProducts, Search, UserInfo, ShowProductKey };
+		MyProducts, Search, UserInfo, ShowProductKey, ProductWithKey };
