@@ -627,9 +627,6 @@ class Product {
 			query += queryList.join(' AND ') + 
 					' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
 		}
-		console.log(joinConditions);
-		console.log(queryList);
-		console.log(query);
 		valueList.push(PAGE_LENGTH);
 		valueList.push(page * PAGE_LENGTH);
 		pool.query(query, valueList, (err, rows) => {
