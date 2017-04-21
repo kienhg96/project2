@@ -50,7 +50,9 @@ export default class Navbar extends Component {
 
 	handleSearchSubmit(e) {
 		e.preventDefault();
-		console.log('Submit', this.state.search);
+		if (this.state.search) {
+			this.props.onSearchSubmit(this.state.search);
+		}
 	}
 
 	handleLogoutClick() {
@@ -72,8 +74,14 @@ export default class Navbar extends Component {
 					<i className="material-icons">more_vert</i>
 				</IconButton>
 			}>
-				<Link to="/myproducts"><MenuItem primaryText="Các tin đã đăng" onTouchTap={this.handleProducts}
+				<Link to="/myproducts"><MenuItem primaryText="Các tin đã đăng" 
+					onTouchTap={this.handleProducts}
 					leftIcon={<i className="material-icons">monetization_on</i>}
+					innerDivStyle={style.menuItem}
+				/></Link>
+				<Link to="/info"><MenuItem primaryText="Thông tin người dùng" 
+					onTouchTap={this.handleProducts}
+					leftIcon={<i className="material-icons">info</i>}
 					innerDivStyle={style.menuItem}
 				/></Link>
 				<Divider />

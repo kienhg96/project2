@@ -44,9 +44,10 @@ export default class Dash extends Component {
 		return (
 			<div style={style.container} className="dashContainer">
 			{
-				products.length === 0 ? 
+				this.props.loading ? 
 				<Loading />
-				:products.map(item => 
+				: (products.length === 0 ? <div>Chưa có dữ liệu</div> :
+					products.map(item => 
 					<ItemHorizontal key={item.productId}
 						title={item.name}
 						price={item.price}
@@ -56,7 +57,7 @@ export default class Dash extends Component {
 						image={item.images[0]}
 						url={"/detail/" + item.productId}
 					/>
-				)
+				))
 			}
 			<Pagination
 				style={{

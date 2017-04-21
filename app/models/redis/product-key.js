@@ -62,12 +62,12 @@ class ProductKey {
 
 	static generateKey(productId) {
 		let tokenStr = randToken.generate(32);
-		tokenStr = 'P' + productId + '#' + tokenStr;
+		tokenStr = 'P' + productId + '@' + tokenStr;
 		return tokenStr;
 	}
 
 	static getProductIdFromKey(key) {
-		let arr = key.split('#');
+		let arr = key.split('@');
 		let productId = parseInt(arr[0].slice(1), 10);
 		return productId;
 	}

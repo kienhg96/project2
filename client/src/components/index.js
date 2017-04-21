@@ -10,7 +10,10 @@ import AddActionButton from './AddActionButton';
 import Dash from './Dash';
 import LeftDrawer from './LeftDrawer';
 import MyProducts from './MyProducts';
+import Search from './Search';
+import UserInfo from './UserInfo';
+import ShowProductKey from './ShowProductKey';
 
 export { Login, Signup, ItemHorizontal, ItemDetail, AddProduct,
 		Navbar, Snack, Loading, AddActionButton, Dash, LeftDrawer,
-		MyProducts };
+		MyProducts, Search, UserInfo, ShowProductKey };

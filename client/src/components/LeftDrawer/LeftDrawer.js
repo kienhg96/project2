@@ -36,6 +36,7 @@ export default class LeftDrawer extends Component {
 		this.handleCityChange = this.handleCityChange.bind(this);
 		this.handleDistrictChange = this.handleDistrictChange.bind(this);
 		this.handleCategoryChange = this.handleCategoryChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	handleOpenDialog() {
@@ -60,6 +61,14 @@ export default class LeftDrawer extends Component {
 
 	handleCategoryChange(e, categoryId) {
 		this.setState({categoryId});
+	}
+
+	handleSubmit() {
+		const { cityId, districtId, categoryId } = this.state;
+		this.props.setFilter({
+			cityId, districtId, categoryId
+		});
+		this.props.getProducts();
 	}
 	
 	render() {
@@ -114,6 +123,7 @@ export default class LeftDrawer extends Component {
 						primary={true}
 						label="Áp dụng"
 						fullWidth={true}
+						onTouchTap={this.handleSubmit}
 					/>
 				</div>
 				<Dialog

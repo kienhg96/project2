@@ -540,11 +540,13 @@ class Product {
 		const ProductImage = require(global.__base + 'models/product-image');
 		const Category = require(global.__base + 'models/category');
 
-		let tableList = ['product', 'user'];
-		let joinConditions = [' product.userId = user.userId '];
+		let tableList = ['product'];
+		let joinConditions = [];
 		let queryList = [];
 		let valueList = [];
 		if (queryObj.userId) {
+			tableList.push('user');
+			joinConditions.push(' product.userId = user.userId ')
 			queryList.push(' user.userId = ? ');
 			valueList.push(queryObj.userId);
 		}
@@ -555,7 +557,7 @@ class Product {
 		if (queryObj.cityId) {
 			queryList.push(' district.cityId = ?');
 			valueList.push(queryObj.cityId);
-			tableList.push('city');
+			tableList.push('district');
 			joinConditions.push(' product.districtId = district.districtId ');
 		}
 		if (queryObj.categoryId) {
@@ -584,6 +586,7 @@ class Product {
 			queryList.push(' product.isSold = ? ');
 			valueList.push(parseInt(queryObj.isSold, 10));
 		}
+
 		let orderBy = ' productId ';
 		let sort = ' DESC ';
 		switch (queryObj.orderBy) {
@@ -612,14 +615,21 @@ class Product {
 			sort = ' ASC ';
 		}
 
-		let query = 'SELECT *, product.date AS pDate, product.districtId as pDistrictId FROM ' + tableList.join(', ') + 
-				' WHERE ' + joinConditions.join(' AND' );
+
+		let query = 'SELECT *, product.date AS pDate, product.districtId as pDistrictId, product.name as pName FROM ' + 
+				tableList.join(', ') + ' WHERE ' + joinConditions.join(' AND' );
 		if (queryList.length === 0) {
 			query += ' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?'; 
 		} else {
-			query += ' AND ' + queryList.join(' AND ') + 
+			if (joinConditions.length > 0) {
+				query += ' AND ';
+			}
+			query += queryList.join(' AND ') + 
 					' ORDER BY ' + orderBy + sort + ' LIMIT ? OFFSET ?';
 		}
+		console.log(joinConditions);
+		console.log(queryList);
+		console.log(query);
 		valueList.push(PAGE_LENGTH);
 		valueList.push(page * PAGE_LENGTH);
 		pool.query(query, valueList, (err, rows) => {
@@ -635,6 +645,7 @@ class Product {
 			rows.forEach((row, i) => {
 				row.date = row.pDate;
 				row.districtId = row.pDistrictId;
+				row.name = row.pName;
 				let product = new Product(row);
 				// Categories
 				Category.findByProductId(product.productId, (err, categories) => {
