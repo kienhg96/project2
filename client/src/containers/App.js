@@ -6,7 +6,8 @@ import { Switch, Route } from 'react-router-dom';
 
 import { AddActionButton, Snack, 
 		AddProduct, Navbar, LeftDrawer,
-		MyProducts } from '../components';
+		MyProducts, Search, UserInfo,
+		ShowProductKey } from '../components';
 import Signup from './Signup';
 import Login from './Login';
 import Dash from './Dash';
@@ -32,6 +33,7 @@ const App = (props) => (
 			<div style={style.navbar}>
 				<Navbar isLogged={props.user.userId ? true : false} logout={props.logout}
 					onLeftIconClick={() => {props.setDrawer(!props.leftDrawer.open)}}
+					onSearchSubmit={query => props.push(`/search/${query}`)}
 				/>
 			</div>
 			<div style={style.content} className={props.leftDrawer.open ? "leftContent" : ""}>
@@ -53,6 +55,18 @@ const App = (props) => (
 							showSnackMessag={props.showSnackMessage}
 						/>
 					}/>
+					<Route exact path="/search/:query" render={({match}) => 
+						<Search match={match} showSnackMessage={props.showSnackMessage}/>
+					}/>
+					<Route exact path="/info" render={() =>
+						<UserInfo cities={props.cities} user={props.user}
+							onSubmit={props.updateInfo}
+							onSubmitPassword={props.updatePassword}
+						/>
+					} />
+					<Route exact path="/productKey/:productKey" render={({match}) => 
+						<ShowProductKey productKey={match.params.productKey}/>
+					}/>
 				</Switch>
 			</div>
 			<Snack open={props.snack.open} message={props.snack.message}
@@ -61,15 +75,17 @@ const App = (props) => (
 			<AddActionButton />
 			<LeftDrawer open={props.leftDrawer.open}
 				cities={props.cities} categories={props.categories}
+				setFilter={props.setFilter} getProducts={props.getProducts}
 			/>
 		</div>
 	</ConnectedRouter>
 )
 
 import { closeSnackMessage, showSnackMessage } from '../actions/snack';
-import { logout } from '../actions/authenticate';
-import { addProduct } from '../actions/products';
+import { logout, updateInfo, updatePassword } from '../actions/authenticate';
+import { addProduct, getProducts } from '../actions/products';
 import { setDrawer } from '../actions/leftDrawer';
+import { setFilter } from '../actions/filter';
 import { push } from 'react-router-redux';
 
 export default connect(state => ({
@@ -80,5 +96,6 @@ export default connect(state => ({
 	leftDrawer: state.leftDrawer
 }), {
 	closeSnackMessage, logout, addProduct,
-	setDrawer, push, showSnackMessage
+	setDrawer, push, showSnackMessage, setFilter,
+	getProducts, updateInfo, updatePassword
 })(App);

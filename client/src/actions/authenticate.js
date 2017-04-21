@@ -111,3 +111,60 @@ export const logout = () => (dispatch, getState) => {
 		}
 	});
 }
+
+export const updateInfo = info => (dispatch, getState) => {
+	$.ajax({
+		url: '/api/user/info',
+		type: 'PUT',
+		data: {
+			fullName: info.fullName,
+			districtId: info.districtId
+		},
+		success: response => {
+			if (response.error === "OK") {
+				dispatch(showSnackMessage('Cập nhật thành công'));
+				dispatch(loadUser());
+			} else {
+				console.log(response);
+				dispatch(showSnackMessage('Đã có lỗi xảy ra'));
+			}
+		},
+		error: xhr => {
+			console.log(xhr.responseText);
+			dispatch(showSnackMessage('Đã có lỗi xảy ra'));
+		}
+	});
+}
+
+export const updatePassword = info => (dispatch, getState) => {
+	$.ajax({
+		url: '/api/user/password',
+		type: 'PUT',
+		data: {
+			password: info.oldPassword,
+			newPassword: info.newPassword
+		},
+		success: response => {
+			if (response.error === "OK") {
+				dispatch(showSnackMessage('Cập nhật mật khẩu thành công'));
+			} else {
+				console.log(response);
+				dispatch(showSnackMessage('Đã có lỗi xảy ra'));
+			}
+		},
+		error: xhr => {
+			let response;
+			try {
+				response = JSON.parse(xhr.responseText);
+			} catch (e) {
+				console.log(xhr.responseText);
+				return dispatch(showSnackMessage('Đã có lỗi xảy ra'));
+			}
+			if (response.error === "WRONG_PASSWORD") {
+				dispatch(showSnackMessage('Mật khẩu cũ không đúng'));
+			} else {
+				dispatch(showSnackMessage('Đã có lỗi xảy ra'));
+			}
+		}
+	});
+}
