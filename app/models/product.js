@@ -615,6 +615,7 @@ class Product {
 			sort = ' ASC ';
 		}
 
+
 		let query = 'SELECT *, product.date AS pDate, product.districtId as pDistrictId, product.name as pName FROM ' + 
 				tableList.join(', ') + ' WHERE ' + joinConditions.join(' AND' );
 		if (queryList.length === 0) {
