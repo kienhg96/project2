@@ -314,7 +314,7 @@ class Product {
 		if (info === {}) {
 			return callback(null);
 		}
-		console.log(info)
+		// console.log(info)
 		let query = 'UPDATE product SET ? WHERE productId = ?';
 		pool.query(query, [info, this._productId], (err, result) => {
 			if (err) {
