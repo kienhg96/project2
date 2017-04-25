@@ -19,5 +19,7 @@ router.post('/addCity', admin.addCity);
 router.post('/addCategory', admin.addCategory);
 router.post('/addDistrict', admin.addDistrict);
 router.get('/logout', deserializeAdmin, admin.logout);
+router.get('/getReport', admin.getReport);
+router.get('/getInfo', admin.getInfo);
 
 module.exports = router;
