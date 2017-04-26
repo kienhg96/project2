@@ -49,10 +49,10 @@ export default class Login extends Component {
 		return (
 			<div style={style.container}>
 				<Paper zDepth={3} style={style.wrapper}>
-					<h1 style={style.title}>Đăng nhập</h1>
+					<h1 style={style.title}>{this.props.titleText ? this.props.titleText : "Đăng nhập"}</h1>
 					<form onSubmit={this.handleFormSubmit}>
 						<TextField
-							floatingLabelText="Số điện thoại/Email"
+							floatingLabelText={this.props.usernameText ? this.props.usernameText :"Số điện thoại/Email"}
 							fullWidth={true}
 							value={username}
 							onChange={handleUsernameChange}
