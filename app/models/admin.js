@@ -293,6 +293,26 @@ class Admin {
 			});
 		});
 	}
+
+	static getReport(callback) {
+		pool.getConnection(function(err, conn) {
+			if (err) {
+				return callback(err);
+			}
+			let query = "SELECT * FROM report";
+			conn.query(query, [], function(err, rows) {
+				conn.release();
+				if (err) {
+					return callback(err);
+				}
+				let results = [];
+				rows.forEach(function(row) {
+					results.push(Object.assign({}, row));
+				});
+				return callback(null, results);
+			});
+		});
+	}
 }
 
 module.exports = Admin;
