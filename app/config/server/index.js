@@ -35,6 +35,7 @@ const log = require(global.__base + 'controllers/middleware/log');
 app.use(log);
 const apiRouter = require(global.__base + 'routes/api');
 app.use('/api', apiRouter);
+app.use('/static', express.static(path.join(global.__base, 'config/static')));
 app.use('/image', express.static(path.join(global.__base, 'images/')));
 app.get('/result', (req, res) => {
 	res.result(200, errTypes.OK, "OK", {x: 1});
@@ -42,6 +43,14 @@ app.get('/result', (req, res) => {
 
 app.get('/error', (req, res) => {
 	res.error('Error');
+});
+
+app.get('/', (req, res) => {
+	res.sendFile(path.join(global.__base, '../client/build/index.html'));	
+});
+
+app.get('/admin', (req, res) => {
+	res.sendFile(path.join(global.__base, '../admin/build/index.html'));	
 });
 
 module.exports = server;

@@ -49,6 +49,7 @@ export default class App extends Component {
 		this.handleDeleteCategory = this.handleDeleteCategory.bind(this);
 		this.handleEditCategory = this.handleEditCategory.bind(this);
 		this.handleEditCategorySubmit = this.handleEditCategorySubmit.bind(this);
+		this.loadData = this.loadData.bind(this);
 	}
 
 	componentWillMount() {
@@ -57,6 +58,10 @@ export default class App extends Component {
 		if (!user.username && history.location.pathname !== '/login') {
 			this.history.push('/login');
 		}
+		this.loadData();
+	}
+
+	loadData() {
 		this.getReports();
 		this.getCities();
 		this.getUsers();
@@ -74,7 +79,7 @@ export default class App extends Component {
 						user: response.data,
 						showDrawer: true
 					}, () => {
-						this.getReports();
+						this.loadData();
 					});
 					this.history.push('/');
 				}
@@ -425,7 +430,7 @@ export default class App extends Component {
 								<Route path="/" render={() => 
 									<Switch>
 										<Route exact path="/" render={() => 
-											<div>Home</div>
+											<div style={{textAlign: 'center'}}>Chào mừng đến với trang dành cho quản trị</div>
 										}/>
 										<Route exact path="/report" render={() =>
 											<Report reports={this.state.reports}
