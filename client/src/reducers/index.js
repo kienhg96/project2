@@ -8,7 +8,6 @@ import page from './page';
 import leftDrawer from './leftDrawer';
 import filter from './filter';
 import loading from './loading';
-import admin from './admin';
 
 export default (state = {}, action) => {
 	return {
@@ -22,6 +21,5 @@ export default (state = {}, action) => {
 		leftDrawer: leftDrawer(state.leftDrawer, action),
 		filter: filter(state.filter, action),
 		loading: loading(state.loading, action),
-		admin: admin(state.admin, action)
 	};
 };

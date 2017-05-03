@@ -10,7 +10,6 @@ import App from './containers/App';
 import { getCities } from './actions/cities';
 import { getCategories } from './actions/categories';
 import { loadUser } from './actions/authenticate';
-import { adminAutoLogin } from './actions/admin';
 import { Loading } from './components';
 import { purple500, purple700, purple400 } from 'material-ui/styles/colors';
 

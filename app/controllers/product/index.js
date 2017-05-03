@@ -14,5 +14,6 @@ module.exports = {
 	getComments: getComments,
 	user: user,
 	guestUser: guestUser,
-	reportProduct: reportProduct
+	reportProduct: reportProduct,
+	count: require('./count')
 };
