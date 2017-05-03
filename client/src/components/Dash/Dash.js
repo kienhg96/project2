@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ItemHorizontal from '../ItemHorizontal';
 import Loading from '../Loading';
 import Pagination from './Pagination';
-
+import $ from 'jquery';
 import './style.css';
 
 const style = {
@@ -26,6 +26,9 @@ const style = {
 export default class Dash extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			pageCount: 1
+		}
 		this.handlePageChage = this.handlePageChage.bind(this);
 	}
 
@@ -37,6 +40,11 @@ export default class Dash extends Component {
 
 	componentDidMount() {
 		this.props.getProducts();
+		$.get('/api/product/count', response => {
+			this.setState({
+				pageCount: Math.ceil(response.data.total / response.data.pageLength)
+			});
+		});
 	}
 
 	render() {
@@ -63,7 +71,7 @@ export default class Dash extends Component {
 				style={{
 					textAlign: 'center'
 				}}
-				total={10}
+				total={this.state.pageCount}
 				current={this.props.page.current + 1}
 				display={10}
 				onChange={this.handlePageChage}

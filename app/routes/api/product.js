@@ -29,5 +29,5 @@ router.post('/report', product.reportProduct);
 router.route('/')
 	.get(product.getProducts);
 router.post('/user/comment/add', deserializeUser, product.user.addComment);
-
+router.get('/count', product.count);
 module.exports = router;
