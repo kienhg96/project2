@@ -12,6 +12,7 @@ import Signup from './Signup';
 import Login from './Login';
 import Dash from './Dash';
 import ItemDetail from './ItemDetail';
+import Admin from './Admin';
 import './style.css';
 
 const style = {
@@ -36,47 +37,53 @@ const App = (props) => (
 					onSearchSubmit={query => props.push(`/search/${query}`)}
 				/>
 			</div>
-			<div style={style.content} className={props.leftDrawer.open ? "leftContent" : ""}>
-				<Switch>
-					<Route exact path="/" component={Dash}/>
-					<Route exact path="/signup" component={Signup}/>
-					<Route exact path="/login" component={Login}/>
-					<Route exact path="/detail/:id" component={ItemDetail}/>
-					<Route exact path="/add" render={() => 
-						<AddProduct 
-							cities={props.cities}
-							categories={props.categories}
-							onSubmit={props.addProduct}
-						/>}
-					/>
-					<Route exact path="/myproducts" render={() =>
-						<MyProducts user={props.user} 
-							push={props.push}
-							showSnackMessag={props.showSnackMessage}
+			<Switch>
+				<Route path="/admin" component={Admin}/>
+				<Route path="/" render={() => 
+					<div style={style.content} className={props.leftDrawer.open ? "leftContent" : ""}>
+						<Switch>
+							<Route exact path="/" component={Dash}/>
+							<Route exact path="/signup" component={Signup}/>
+							<Route exact path="/login" component={Login}/>
+							<Route exact path="/detail/:id" component={ItemDetail}/>
+							<Route exact path="/add" render={() => 
+								<AddProduct 
+									cities={props.cities}
+									categories={props.categories}
+									onSubmit={props.addProduct}
+								/>}
+							/>
+							<Route exact path="/myproducts" render={() =>
+								<MyProducts user={props.user} 
+									push={props.push}
+									showSnackMessag={props.showSnackMessage}
+								/>
+							}/>
+							<Route exact path="/search/:query" render={({match}) => 
+								<Search match={match} showSnackMessage={props.showSnackMessage}/>
+							}/>
+							<Route exact path="/info" render={() =>
+								<UserInfo cities={props.cities} user={props.user}
+									onSubmit={props.updateInfo}
+									onSubmitPassword={props.updatePassword}
+								/>
+							} />
+							<Route exact path="/productKey/:productKey" render={({match}) => 
+								<ShowProductKey productKey={match.params.productKey}/>
+							}/>
+							<Route exact path="/product" component={ProductWithKey}/>
+							
+						</Switch>
+						<LeftDrawer open={props.leftDrawer.open}
+							cities={props.cities} categories={props.categories}
+							setFilter={props.setFilter} getProducts={props.getProducts}
 						/>
-					}/>
-					<Route exact path="/search/:query" render={({match}) => 
-						<Search match={match} showSnackMessage={props.showSnackMessage}/>
-					}/>
-					<Route exact path="/info" render={() =>
-						<UserInfo cities={props.cities} user={props.user}
-							onSubmit={props.updateInfo}
-							onSubmitPassword={props.updatePassword}
-						/>
-					} />
-					<Route exact path="/productKey/:productKey" render={({match}) => 
-						<ShowProductKey productKey={match.params.productKey}/>
-					}/>
-					<Route exact path="/product" component={ProductWithKey}/>
-				</Switch>
-			</div>
+						<AddActionButton />
+					</div>
+				}/>
+			</Switch>
 			<Snack open={props.snack.open} message={props.snack.message}
 				onRequestClose={props.closeSnackMessage}
-			/>
-			<AddActionButton />
-			<LeftDrawer open={props.leftDrawer.open}
-				cities={props.cities} categories={props.categories}
-				setFilter={props.setFilter} getProducts={props.getProducts}
 			/>
 		</div>
 	</ConnectedRouter>

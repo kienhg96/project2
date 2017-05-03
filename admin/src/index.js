@@ -1,22 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { store } from './config';
-import { Provider } from 'react-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import App from './containers/App';
-import { getCities } from './actions/cities';
-import { getCategories } from './actions/categories';
-import { loadUser } from './actions/authenticate';
-import { adminAutoLogin } from './actions/admin';
-import { Loading } from './components';
 import { purple500, purple700, purple400 } from 'material-ui/styles/colors';
-
-store.dispatch(getCities());
-store.dispatch(getCategories());
-injectTapEventPlugin();
+import Loading from './components/Loading';
+import $ from 'jquery';
+import App from './components/App';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 const customeTheme = {
 	spacing: lightBaseTheme.space,
@@ -29,21 +20,35 @@ const customeTheme = {
 		disabledColor: "#757575"
 	}
 }
+injectTapEventPlugin();
 
 ReactDOM.render(
 	<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
 		<Loading />
 	</MuiThemeProvider>,
 	document.getElementById('root')
-)
+);
 
-store.dispatch(loadUser(() => {
+const render = (user) => {
 	ReactDOM.render(
-	  	<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
-		  	<Provider store={store}>
-		  		<App />
-			</Provider>
+		<MuiThemeProvider muiTheme={getMuiTheme(customeTheme)}>
+			<App user={user}/>
 		</MuiThemeProvider>,
-	  	document.getElementById('root')
+		document.getElementById('root')
 	);
-}));
+}
+
+$.ajax({
+	url: '/api/admin/getInfo',
+	type: 'GET',
+	success: response => {
+		if (response.error === "OK") {
+			render(response.data);
+		} else {
+			render({});
+		}
+	},
+	error: xhr => {
+		render({});
+	}
+});

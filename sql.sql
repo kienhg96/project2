@@ -126,3 +126,17 @@ ALTER TABLE project2.product
 -- 19/04/2017
 -- Create ANONYMOUS_USER
 INSERT INTO user SET userId = 1, phone = 'NONE', districtId = 1, fullName = 'ANONYMOUS_USER';
+
+-- 26/04/2017
+alter table comment drop foreign key fk_comment_userId;
+alter table comment drop foreign key fk_comment_productId;
+
+alter table comment add CONSTRAINT fk_comment_userId FOREIGN KEY (userId) REFERENCES project2.user(userId) ON DELETE CASCADE;
+alter table comment ADD CONSTRAINT fk_comment_productId FOREIGN KEY (productId) REFERENCES project2.product(productId)  ON DELETE CASCADE;
+alter table productimage drop foreign key fk_productimage_productId;
+alter table productimage add CONSTRAINT fk_productimage_productId FOREIGN KEY (productId) REFERENCES `project2`.product(productId)  ON DELETE CASCADE;
+alter table report drop foreign key fk_rp_product;
+alter table report add constraint fk_rp_product foreign key (productId) references product(productId) ON DELETE CASCADE;
+alter table categorylink drop foreign key fk_catlink_category;
+alter table categorylink add constraint fk_catlink_category foreign key (categoryId) 
+  references category(categoryId) ON DELETE CASCADE;

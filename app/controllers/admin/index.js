@@ -14,6 +14,8 @@ const addDistrict = require('./add-district');
 const addCategory = require('./add-category');
 const searchUser = require('./search-user');
 const searchProduct = require('./search-product');
+const getReport = require('./get-reports');
+const getInfo = require('./get-info');
 
 module.exports = {
 	login: login,
@@ -29,5 +31,10 @@ module.exports = {
 	addDistrict: addDistrict,
 	addCategory: addCategory,
 	searchProduct: searchProduct,
-	searchUser: searchUser
+	searchUser: searchUser,
+	getReport: getReport,
+	getInfo: getInfo,
+	deleteReport: require('./delete-report'),
+	getCategories: require('./get-categories'),
+	editCategory: require('./edit-category')
 };
