@@ -75,6 +75,18 @@ class Category {
 		let query = 'DELETE FROM categorylink WHERE productId = ?';
 		pool.query(query, [productId], callback);
 	}
+
+	static update(categoryId, value, callback) {
+		const query = "UPDATE category SET name = ? WHERE categoryId = ?";
+		pool.query(query, [value.name, categoryId], err => {
+			if (err) {
+				return callback(err);
+			}
+			return callback(null, {
+				categoryId, name: value.name
+			});
+		})
+	}
 }
 
 module.exports = Category;

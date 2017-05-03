@@ -33,5 +33,8 @@ module.exports = {
 	searchProduct: searchProduct,
 	searchUser: searchUser,
 	getReport: getReport,
-	getInfo: getInfo
+	getInfo: getInfo,
+	deleteReport: require('./delete-report'),
+	getCategories: require('./get-categories'),
+	editCategory: require('./edit-category')
 };

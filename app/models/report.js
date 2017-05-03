@@ -44,6 +44,13 @@ class Report {
 		return callback(null, this.rawData());
 	}
 
+	delete(callback) {
+		const query = "DELETE FROM report WHERE reportId = ?";
+		pool.query(query, [this._reportId], err => {
+			return callback(err);
+		});
+	} 
+
 	static findById(reportId, callback) {
 		let query = 'SELECT * FROM report WHERE reportId = ?';
 		pool.query(query, [reportId], (err, rows) => {

@@ -240,12 +240,13 @@ class User {
 		}
 		query += queryList.join(' AND ');
 		query += ' ORDER BY userId DESC LIMIT ? OFFSET ?';
-		valueList.push(PAGE_LENGTH);
-		valueList.push(page * PAGE_LENGTH);
+		// valueList.push(PAGE_LENGTH);
+		// valueList.push(page * PAGE_LENGTH);
 
 		if (queryList.length === 0) {
-			query = 'SELECT * FROM user ORDER BY userId DESC LIMIT ? OFFSET ?';
-			valueList = [PAGE_LENGTH, page * PAGE_LENGTH];
+			query = 'SELECT * FROM user ORDER BY userId';
+			// query = 'SELECT * FROM user ORDER BY userId DESC LIMIT ? OFFSET ?';
+			// valueList = [PAGE_LENGTH, page * PAGE_LENGTH];
 		}
 
 		pool.query(query, valueList, (err, rows) => {

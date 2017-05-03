@@ -156,25 +156,14 @@ class Admin {
 			if (err) {
 				return callback(err);
 			}
-
-			let query = 'SELECT * FROM categorylink WHERE categoryId = ?';
-			conn.query(query, [categoryId], function(err, rows) {
+			const query = 'DELETE FROM category WHERE categoryId = ?';
+			conn.query(query, [categoryId], function(err, result) {
+				conn.release();
 				if (err) {
 					return callback(err);
 				}
-				if (rows[0]) {
-					return callback('Exist');
-				}
 
-				query = 'DELETE FROM category WHERE categoryId = ?';
-				conn.query(query, [categoryId], function(err, result) {
-					conn.release();
-					if (err) {
-						return callback(err);
-					}
-
-					return callback(null);
-				});
+				return callback(null);
 			});
 		});
 	}
@@ -213,14 +202,16 @@ class Admin {
 					return callback('Exist');
 				}
 
-				query = 'INSERT INTO category(name) VALUES(?)';
+				query = 'INSERT INTO category SET name = ?';
 				conn.query(query, [categoryName], function(err, result) {
 					conn.release();
 					if (err) {
 						return callback(err);
 					}
-
-					return callback(null);
+					return callback(null, {
+						categoryId: result.insertId,
+						name: categoryName
+					});
 				});
 			});
 		});
@@ -299,7 +290,10 @@ class Admin {
 			if (err) {
 				return callback(err);
 			}
-			let query = "SELECT * FROM report";
+			let query = "SELECT reportId, product.productId AS productId, content, " +
+					"report.date as rDate, name, description, price, product.date AS pDate, "+
+					"product.districtId as pDistrictId, user.userId, user.districtId AS uDistrictid, fullName, phone FROM report, product, user WHERE report.productId = product.productId " + 
+					"AND product.userId = user.userId";
 			conn.query(query, [], function(err, rows) {
 				conn.release();
 				if (err) {
@@ -307,7 +301,25 @@ class Admin {
 				}
 				let results = [];
 				rows.forEach(function(row) {
-					results.push(Object.assign({}, row));
+					results.push({
+						reportId: row.reportId,
+						content: row.content,
+						date: row.rDate,
+						product: {
+							productId: row.productId,
+							name: row.name,
+							description: row.description,
+							price: row.price,
+							date: row.pDate,
+							districtId: row.pDistrictId
+						},
+						user: {
+							userId: row.userId,
+							districtId: row.uDistrictid,
+							fullName: row.fullName,
+							phone: row.phone
+						}
+					});
 				});
 				return callback(null, results);
 			});
